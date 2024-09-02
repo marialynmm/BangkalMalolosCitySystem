@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,6 +29,19 @@
             padding: 20px;
             position: fixed;
             transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sidebar img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            /* Adjust if needed */
+            border-radius: 8px;
+            margin-bottom: 20px;
+            /* Space below the image */
         }
 
         .sidebar a {
@@ -131,25 +145,22 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
+            <img src="Images/logo.png" alt="Barangay Bangkal" />
             <div class="logo">Admin</div>
             <a href="#dashboard">Dashboard</a>
-            <a href="#users">Users</a>
-            <a href="#settings">Settings</a>
-            <a href="#orders">Orders</a>
             <a href="#analytics">Analytics</a>
-            <a href="#messages">Messages</a>
-            <a href="#notifications">Notifications</a>
-            <a href="#support">Support</a>
             <a href="#profile">Profile</a>
             <a href="#logout">Logout</a>
         </div>
 
         <!-- Content -->
         <div class="content">
+            <img src="Images/logo.png" alt="Barangay Bangkal" height="100"/>
             <h1>Admin Dashboard</h1>
             <div class="dashboard">
                 <!-- Pie Chart Card -->
@@ -209,64 +220,65 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         function resizeCanvas(chart) {
-    const canvas = chart.canvas;
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
+            const canvas = chart.canvas;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
 
-    const ratio = window.devicePixelRatio || 1;
-    canvas.width = width * ratio;
-    canvas.height = height * ratio;
+            const ratio = window.devicePixelRatio || 1;
+            canvas.width = width * ratio;
+            canvas.height = height * ratio;
 
-    ctx.scale(ratio, ratio);
-    chart.update();
-}
+            ctx.scale(ratio, ratio);
+            chart.update();
+        }
 
-// Pie Chart
-const pieCtx = document.getElementById('pieChart').getContext('2d');
-const pieChart = new Chart(pieCtx, {
-    type: 'pie',
-    data: {
-        labels: ['Red', 'Blue', 'Yellow'],
-        datasets: [{
-            data: [300, 50, 100],
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-        }]
-    }
-});
-resizeCanvas(pieChart);
+        // Pie Chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        const pieChart = new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow'],
+                datasets: [{
+                    data: [300, 50, 100],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            }
+        });
+        resizeCanvas(pieChart);
 
-// Bar Chart
-const barCtx = document.getElementById('barChart').getContext('2d');
-const barChart = new Chart(barCtx, {
-    type: 'bar',
-    data: {
-        labels: ['January', 'February', 'March', 'April'],
-        datasets: [{
-            label: 'Sales',
-            data: [12, 19, 3, 5],
-            backgroundColor: '#36A2EB'
-        }]
-    }
-});
-resizeCanvas(barChart);
+        // Bar Chart
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        const barChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April'],
+                datasets: [{
+                    label: 'Sales',
+                    data: [12, 19, 3, 5],
+                    backgroundColor: '#36A2EB'
+                }]
+            }
+        });
+        resizeCanvas(barChart);
 
-// Line Chart
-const lineCtx = document.getElementById('lineChart').getContext('2d');
-const lineChart = new Chart(lineCtx, {
-    type: 'line',
-    data: {
-        labels: ['January', 'February', 'March', 'April'],
-        datasets: [{
-            label: 'Revenue',
-            data: [65, 59, 80, 81,90,200],
-            borderColor: '#FF6384',
-            fill: false
-        }]
-    }
-});
-resizeCanvas(lineChart);
+        // Line Chart
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        const lineChart = new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [65, 59, 80, 81, 90, 200],
+                    borderColor: '#FF6384',
+                    fill: false
+                }]
+            }
+        });
+        resizeCanvas(lineChart);
 
     </script>
 </body>
+
 </html>
