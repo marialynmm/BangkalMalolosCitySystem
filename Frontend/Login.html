@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barangay Malolos - Welcome</title>
+    <title>Barangay Bangkal - Welcome</title>
     <style>
         * {
             margin: 0;
@@ -11,15 +12,15 @@
             box-sizing: border-box;
         }
 
-        body, html {
+        body,
+        html {
             height: 100%;
             font-family: 'Arial', sans-serif;
         }
 
         /* Background Style */
         body {
-            background: linear-gradient(to right, rgba(0, 123, 255, 0.7), rgba(255, 255, 255, 0.7)), 
-                        url('https://source.unsplash.com/1600x900/?city,barangay') no-repeat center center/cover;
+            background: url('Images/bg.png') no-repeat center center/cover;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -63,26 +64,57 @@
         /* Modal Background */
         .modal {
             display: none;
+            /* Hidden by default */
             position: fixed;
+            /* Stay in place */
             top: 0;
+            /* Align to the top */
             left: 0;
+            /* Align to the left */
             width: 100%;
+            /* Full width */
             height: 100%;
+            /* Full height */
             background-color: rgba(0, 0, 0, 0.7);
+            /* Semi-transparent background */
             justify-content: center;
+            /* Center horizontally */
             align-items: center;
+            /* Center vertically */
             z-index: 1000;
+            /* Make sure it is on top */
         }
 
         /* Modal Content */
         .modal-content {
             background: rgba(255, 255, 255, 0.9);
+            /* Slightly transparent white background */
             padding: 40px;
+            /* Padding inside the modal */
             border-radius: 10px;
+            /* Rounded corners */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            /* Shadow effect */
             max-width: 400px;
+            /* Maximum width */
             width: 100%;
+            /* Full width up to max-width */
             text-align: left;
+            /* Left align text inside */
+            position: relative;
+            /* For positioning the close button */
+        }
+
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: #555;
+            cursor: pointer;
+            background: none;
+            border: none;
         }
 
         .modal-content h1 {
@@ -117,18 +149,6 @@
             box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
         }
 
-        /* Modal Close Button */
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            color: #555;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-
         /* Responsive */
         @media (max-width: 500px) {
             .welcome-message h1 {
@@ -145,12 +165,14 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- Welcome Message -->
     <div class="welcome-message">
-        <h1>Welcome to Barangay Malolos</h1>
-        <p>Connecting the community and providing essential services online</p>
+        <img src="Images/logo.png" alt="Barangay Bangkal" />
+        <h1>Welcome to Barangay Bangkal</h1>
+        <p>Malolos, Bulacan</p>
     </div>
 
     <!-- Login Button -->
@@ -170,12 +192,21 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="Enter your password">
                 </div>
-                <button type="submit" class="login-btn">Submit</button>
+                <button type="submit" class="login-btn" id="login">Login</button>
             </form>
         </div>
     </div>
 
     <script>
+        //Login
+        document.getElementById('login').addEventListener('click', function (event) {
+            // Prevent form submission if you want to use this button outside a form
+            event.preventDefault();
+
+            // Redirect to the Dashboard.html
+            window.location.href = 'Dashboard.html';
+        });
+
         // Open modal
         const openModalBtn = document.getElementById('openModalBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
@@ -196,4 +227,5 @@
         });
     </script>
 </body>
+
 </html>
