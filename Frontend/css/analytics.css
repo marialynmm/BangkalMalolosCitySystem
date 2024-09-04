@@ -1,0 +1,432 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    background-color: #ecf0f1;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    transition: margin-left 0.3s;
+}
+
+.sidebar {
+    background-color: #416142;
+    width: 250px;
+    height: 100%;
+    padding: 20px;
+    position: fixed;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    display: block;
+    padding: 15px 20px;
+    color: #ecf0f1;
+    font-size: 18px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #34495e;
+}
+
+.sidebar .logo {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #ecf0f1;
+    font-weight: bold;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+    overflow: hidden;
+}
+
+.sidebar.collapsed .logo,
+.sidebar.collapsed a {
+    display: none;
+}
+
+.sidebar.collapsed a {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+.content {
+    margin-left: 80px;
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    transition: margin-left 0.3s;
+}
+
+.content.expanded {
+    margin-left: 60px;
+}
+
+h1 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+    width: 100%;
+    justify-items: center;
+}
+
+.card {         
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 100%;
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    margin: 0;
+    /* Remove default margin from the title */
+}
+
+.edit-button {
+    background-color: #007bff;
+    /* Blue background */
+    color: white;
+    /* White text */
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.edit-button:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}
+
+.card h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.card canvas {
+    width: 100% !important;
+    height: 400px !important;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+        padding: 10px 0;
+    }
+
+    .sidebar a {
+        padding: 10px 0;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .sidebar .logo {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .content {
+        margin-left: 60px;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .card canvas {
+        height: 300px !important;
+    }
+}
+
+.sidebar-wrapper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.sidebar {
+    width: 60px;
+    /* Initial collapsed width */
+    height: 100%;
+    background-color: #3c5f3d;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    /* Position relative for button positioning */
+}
+
+.sidebar:hover:not(.open) {
+    width: 200px;
+    /* Expanded width on hover if not manually toggled open */
+}
+
+.sidebar.open {
+    width: 200px;
+    /* Expanded width when open */
+}
+
+.sidebar .profile {
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+    color: white;
+    transition: padding 0.3s ease;
+    width: 100%;
+}
+
+.sidebar img {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    opacity: 1;
+    border-radius: 50%;
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.sidebar .profile span {
+    margin-left: 30px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.sidebar.open img,
+.sidebar:hover img {
+    width: 150px;
+    height: 150px;
+}
+
+.sidebar.open .profile span,
+.sidebar:hover .profile span {
+    opacity: 1;
+}
+
+.sidebar ul {
+    position: relative;
+    list-style-type: none;
+    padding: 20px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    padding: 20px 10px 20px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.sidebar ul li:hover {
+    background-color: #1e8534;
+}
+
+.sidebar ul li i {
+    position: relative;
+    left: 4px;
+    font-size: 24px;
+    margin-right: 5px;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar ul li span {
+    margin-left: 15px;
+    display: flex;
+    justify-content: flex-start;
+    text-align: left;
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.open ul li span,
+.sidebar:hover ul li span {
+    opacity: 1;
+}
+
+.toggle-btn {
+    position: absolute;
+    top: 50%;
+    right: -25px;
+    width: 50px;
+    height: 60px;
+    background-color: #3c5f3d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 50%;
+
+}
+
+.toggle-btn i {
+    position: relative;
+    top: 1px;
+}
+
+.toggle-btn:hover {
+    background-color: #1e8534;
+}
+
+.sidebar .profile {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black background with opacity */
+}
+
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Darker background for better contrast */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #ffffff;
+    /* White background for the modal */
+    margin: 5% auto;
+    /* Centered and a bit closer to the top */
+    padding: 30px;
+    border-radius: 8px;
+    /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Subtle shadow for depth */
+    width: 80%;
+    /* Responsive width */
+    max-width: 600px;
+    /* Maximum width for large screens */
+    position: relative;
+    /* Position relative to use absolute positioning for the close button */
+}
+
+/* Close Button */
+.close {
+    color: #333;
+    /* Darker color for better visibility */
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Close Button Hover */
+.close:hover,
+.close:focus {
+    color: #ff0000;
+    /* Red color on hover for attention */
+    text-decoration: none;
+}
+
+/* Buttons within the Modal */
+button {
+    background-color: #007bff;
+    /* Blue background for buttons */
+    color: #ffffff;
+    /* White text color */
+    border: none;
+    border-radius: 4px;
+    /* Rounded corners */
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px 0;
+    /* Spacing between buttons */
+}
+
+button:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}
+
+button:active {
+    background-color: #004494;
+    /* Even darker blue when clicked */
+}
