@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="css/analytics.css">
     <script src="scripts/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs@latest"></script>
+
     <title>Analytics</title>
 </head>
 
@@ -16,13 +18,14 @@
     <div class="container">
         <!-- Sidebar -->
         <?php include 'includes/sidebar.php'; ?>
+        <div id="tooltip" class="tooltip" style="display: none;">Drag to move</div>
 
         <!-- Content -->
         <div class="content" id="content">
-            <h1>Barangay Bangkal</h1>
+            <!-- <h1>Barangay Bangkal</h1> -->
             <div class="dashboard">
                 <!-- Pie Chart Card -->
-                <div class="card">
+                <div class="card" id="pieChartCard">
                     <div class="card-header">
                         <h3 class="card-title">Vaccine Doses</h3>
                         <button id="editPieChart" class="edit-button">Edit</button>
@@ -30,18 +33,27 @@
                     <canvas id="pieChart"></canvas>
                 </div>
                 <!-- Bar Chart Card -->
-                <div class="card">
-                    <h3>Age Group</h3>
+                <div class="card" id="barChartCard">
+                    <div class="card-header">
+                        <h3>Age Group</h3>
+                        <button id="editBarChart" class="edit-button">Edit</button>
+                    </div>
                     <canvas id="barChart"></canvas>
                 </div>
                 <!-- Line Chart Card -->
-                <div class="card">
-                    <h3>Population Growth</h3>
+                <div class="card" id="lineChartCard">
+                    <div class="card-header">
+                        <h3>Population Growth</h3>
+                        <button id="editBarChart" class="edit-button">Edit</button>
+                    </div>
                     <canvas id="lineChart"></canvas>
                 </div>
                 <!-- Table Data Card -->
-                <div class="card">
-                    <h3>Data Table</h3>
+                <div class="card" id="dataTableCard">
+                    <div class="card-header">
+                        <h3>Data Table</h3>
+                        <button id="editBarChart" class="edit-button">Edit</button>
+                    </div>
                     <table border="1" width="100%">
                         <thead>
                             <tr>
@@ -97,7 +109,11 @@
                 <button id="cancelEdit">Cancel</button>
             </div>
         </div>
-       
+
+        <!-- Grid Overlay -->
+        <div class="grid-overlay"></div>
+    </div>
 </body>
+
 
 </html>
