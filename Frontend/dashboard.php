@@ -10,9 +10,35 @@
     <script src="scripts/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Dashboard</title>
+
+    <style>
+
+        .logo-stamp {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            /* Adjust transparency here */
+            pointer-events: none;
+            /* Ensures that the stamp doesn't interfere with user interactions */
+        }
+
+        .logo-stamp img {
+            max-width: 100vw;
+            /* Ensure the image scales with the viewport width */
+            max-height: 100vh;
+            /* Ensure the image scales with the viewport height */
+            width: 500px;
+            height: 500px;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="logo-stamp">
+        <img src="images/logo.png" alt="Logo">
+    </div>
     <div class="container">
         <!-- Sidebar -->
         <?php include 'includes/sidebar.php'; ?>
@@ -20,9 +46,6 @@
         <!-- Content -->
         <div class="content" id="content">
             <div class="main-content">
-                <header>
-                    <h1>What is new for today?</h1>
-                </header>
 
                 <section class="dashboard">
                     <div class="card">
@@ -72,44 +95,29 @@
                     </div>
                     <div class="card">
                         <div class="card-content">
-                            <i class="icon"><i class="fa-solid fa-check-to-slot"></i></i></i>
+                            <i class="icon"><i class="fa-solid fa-syringe"></i></i></i></i>
                             <div class="text-content">
-                                <h3>Voters</h3>
+                                <h3>Vaccinated</h3>
                                 <p>32,450</p>
                             </div>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-content">
-                            <i class="icon"><i class="fa-solid fa-check-to-slot"></i></i></i>
+                            <i class="icon"><i class="fa-regular fa-syringe"></i></i></i></i>
                             <div class="text-content">
-                                <h3>Voters</h3>
+                                <h3>Not Vaccinated</h3>
                                 <p>32,450</p>
                             </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-content">
-                            <i class="icon"><i class="fa-solid fa-check-to-slot"></i></i></i>
-                            <div class="text-content">
-                                <h3>Voters</h3>
-                                <p>32,450</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-content">
-                            <i class="icon"><i class="fa-solid fa-check-to-slot"></i></i></i>
-                            <div class="text-content">
-                                <h3>Voters</h3>
-                                <p>32,450</p>
-                            </div>
-                        </div>
-                    </div>
-                    
+
                 </section>
             </div>
         </div>
+
+         <!-- Footer -->
+         <!-- <?php include 'includes/footer.php'; ?> -->
 
 </body>
 

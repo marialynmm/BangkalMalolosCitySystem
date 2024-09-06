@@ -10,11 +10,34 @@
     <script src="scripts/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/interactjs@latest"></script>
+    <style>
+        .logo-stamp {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            /* Adjust transparency here */
+            pointer-events: none;
+            /* Ensures that the stamp doesn't interfere with user interactions */
+        }
 
+        .logo-stamp img {
+            max-width: 100vw;
+            /* Ensure the image scales with the viewport width */
+            max-height: 100vh;
+            /* Ensure the image scales with the viewport height */
+            width: 500px;
+            height: 500px;
+        }
+    </style>
     <title>Analytics</title>
 </head>
 
 <body>
+    <div class="logo-stamp">
+        <img src="images/logo.png" alt="Logo">
+    </div>
     <div class="container">
         <!-- Sidebar -->
         <?php include 'includes/sidebar.php'; ?>

@@ -11,7 +11,7 @@ function navigate(url) {
 function initializeInteract() {
     // Define boundary variable
     const boundary = {
-        top: 0,
+        top: 20,
         left: 80,
         right: window.innerWidth, // You can set this to any desired value
         bottom: window.innerHeight // You can set this to any desired value
@@ -35,8 +35,8 @@ function initializeInteract() {
 
     function adjustCardPositions() {
         const cards = Array.from(document.querySelectorAll('.card'));
-        const gap = 20; // Desired gap between cards
-        const gridSize = 50; // Size of grid cells
+        const gap = 1; // Desired gap between cards
+        const gridSize = 1; // Size of grid cells
 
         cards.forEach((card) => {
             const rect = card.getBoundingClientRect();
@@ -77,8 +77,8 @@ function initializeInteract() {
                     let x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
                     let y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
-                    x = Math.round(x / 50) * 50;
-                    y = Math.round(y / 50) * 50;
+                    x = Math.round(x / 25) * 25;
+                    y = Math.round(y / 25) * 25;
 
                     target.style.transform = `translate(${x}px, ${y}px)`;
                     target.setAttribute('data-x', x);
@@ -93,9 +93,9 @@ function initializeInteract() {
             },
             modifiers: [
                 interact.modifiers.snap({
-                    targets: [interact.snappers.grid({ x: 50, y: 50 })],
+                    targets: [interact.snappers.grid({ x: 25, y: 25 })],
                     range: Infinity,
-                    relativePoints: [{ x: 0, y: 0 }]
+                    relativePoints: [{ x: 1, y: 1 }]
                 }),
                 interact.modifiers.restrictEdges({
                     outer: boundary // Use the boundary variable
@@ -111,12 +111,12 @@ function initializeInteract() {
                 },
                 move(event) {
                     const target = event.target;
-                    const minSize = 150;
+                    const minSize = 10;
                     let x = (parseFloat(target.getAttribute('data-x')) || 0);
                     let y = (parseFloat(target.getAttribute('data-y')) || 0);
 
-                    const newWidth = Math.max(Math.round(event.rect.width / 50) * 50, minSize);
-                    const newHeight = Math.max(Math.round(event.rect.height / 50) * 50, minSize);
+                    const newWidth = Math.max(Math.round(event.rect.width / 1) * 1, minSize);
+                    const newHeight = Math.max(Math.round(event.rect.height / 1) * 1, minSize);
 
                     target.style.width = `${newWidth}px`;
                     target.style.height = `${newHeight}px`;
@@ -124,8 +124,8 @@ function initializeInteract() {
                     x += event.deltaRect.left;
                     y += event.deltaRect.top;
 
-                    x = Math.round(x / 50) * 50;
-                    y = Math.round(y / 50) * 50;
+                    x = Math.round(x / 1) * 1;
+                    y = Math.round(y / 1) * 1;
 
                     target.style.transform = `translate(${x}px, ${y}px)`;
                     target.setAttribute('data-x', x);
@@ -134,8 +134,8 @@ function initializeInteract() {
                     // Auto-fit content
                     const content = target.querySelector('.card-content');
                     if (content) {
-                        content.style.width = `${newWidth - 40}px`; // Adjust padding
-                        content.style.height = `${newHeight - 40}px`; // Adjust padding
+                        content.style.width = `${newWidth - 1}px`; // Adjust padding
+                        content.style.height = `${newHeight - 1}px`; // Adjust padding
                     }
                 },
                 end(event) {
@@ -149,10 +149,10 @@ function initializeInteract() {
                     outer: boundary // Use the boundary variable
                 }),
                 interact.modifiers.restrictSize({
-                    min: { width: 150, height: 150 },
+                    min: { width: 1, height: 1 },
                 }),
                 interact.modifiers.snap({
-                    targets: [interact.snappers.grid({ x: 50, y: 50 })],
+                    targets: [interact.snappers.grid({ x: 1, y: 1 })],
                     range: Infinity,
                     relativePoints: [{ x: 0, y: 0 }]
                 })
