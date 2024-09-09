@@ -3,7 +3,7 @@
 $host = "localhost";
 $user = "root";
 $password = "";
-$db = "capstone"
+$db = "brgy_bankal_db";
 
 $conn = new mysqli($host,$user,$password,$db);
 
