@@ -31,6 +31,13 @@
             width: 500px;
             height: 500px;
         }
+        .table-container {
+            max-height: 400px; /* Adjust the height as needed */
+            overflow-y: auto;
+            overflow-x: hidden;
+            border: 1px solid #ddd; /* Optional border for aesthetics */
+            margin-top: 20px;
+        }
     </style>
     <title>Analytics</title>
 </head>
@@ -78,36 +85,53 @@
                         <h3>Data Table</h3>
                         <button id="editBarChart" class="edit-button">Edit</button>
                     </div>
-                    <table border="1" width="100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>John Doe</td>
-                                <td>john@example.com</td>
-                                <td>Active</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jane Smith</td>
-                                <td>jane@example.com</td>
-                                <td>Inactive</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Bob Johnson</td>
-                                <td>bob@example.com</td>
-                                <td>Active</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <?php
+                                    include "../Backend/connect.php";
+
+                                    // Query to get the column names dynamically from the table
+                                    $sql = "SHOW COLUMNS FROM Census_tb"; // Replace with your table name
+                                    $result = $conn->query($sql);
+
+                                    // Check if the query returned any columns
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo "<th>" . $row['Field'] . "</th>";
+                                        }
+                                    } else {
+                                        echo "<tr><td>No columns found</td></tr>";
+                                    }
+                                    ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                // Query to select data from the table
+                                $sql = "SELECT * FROM Census_tb"; // Replace with your table name
+                                $result = $conn->query($sql);
+
+                                // Check if there are rows
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>";
+                                        foreach ($row as $data) {
+                                            echo "<td>" . $data . "</td>";
+                                        }
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='10'>No data available</td></tr>";
+                                }
+
+                                // Close the connection
+                                $conn->close();
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
