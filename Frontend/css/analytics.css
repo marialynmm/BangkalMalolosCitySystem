@@ -143,10 +143,6 @@ h1 {
     justify-content: start;
 }
 
-#dataTableCard {
-    justify-content: start;
-}
-
 .tooltip {
     position: absolute;
     background-color: #333;
@@ -158,6 +154,47 @@ h1 {
     /* Ensures tooltip doesn't interfere with hover events */
     z-index: 1000;
     /* Ensure it's on top of other elements */
+}
+
+/*TABLE*/
+.table-container {
+    /* Adjust the height as needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #ddd;
+    /* Optional border for aesthetics */
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+th,
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
 }
 
 
@@ -182,6 +219,7 @@ h1 {
 }
 
 .card-content {
+    overflow: auto;
     flex: 1;
     /* Allow content to grow and shrink */
     display: flex;

@@ -13,8 +13,8 @@ function initializeInteract() {
     const boundary = {
         top: 20,
         left: 80,
-        right: window.innerWidth, // You can set this to any desired value
-        bottom: window.innerHeight // You can set this to any desired value
+        right: window.innerWidth,
+        bottom: window.innerHeight
     };
 
     const gridOverlay = document.createElement('div');
@@ -35,8 +35,8 @@ function initializeInteract() {
 
     function adjustCardPositions() {
         const cards = Array.from(document.querySelectorAll('.card'));
-        const gap = 1; // Desired gap between cards
-        const gridSize = 1; // Size of grid cells
+        const gap = 1;
+        const gridSize = 1;
 
         cards.forEach((card) => {
             const rect = card.getBoundingClientRect();
@@ -47,7 +47,6 @@ function initializeInteract() {
             card.style.top = `${y}px`;
         });
 
-        // Ensure cards do not overlap
         for (let i = 0; i < cards.length; i++) {
             for (let j = i + 1; j < cards.length; j++) {
                 const rect1 = cards[i].getBoundingClientRect();
@@ -58,7 +57,6 @@ function initializeInteract() {
                     rect1.bottom < rect2.top ||
                     rect1.top > rect2.bottom)) {
 
-                    // Adjust positions to avoid overlap
                     cards[j].style.top = `${rect1.bottom + gap}px`; // Move below the first card
                 }
             }
@@ -69,8 +67,8 @@ function initializeInteract() {
         .draggable({
             listeners: {
                 start(event) {
-                    showGrid(); // Show grid when dragging starts
-                    event.target.style.zIndex = 1000; // Bring the card to the front
+                    showGrid();
+                    event.target.style.zIndex = 1000;
                 },
                 move(event) {
                     const target = event.target;
@@ -85,10 +83,10 @@ function initializeInteract() {
                     target.setAttribute('data-y', y);
                 },
                 end(event) {
-                    hideGrid(); // Hide grid after dragging ends
-                    event.target.style.zIndex = ''; // Reset the z-index
-                    adjustCardPositions(); // Adjust card positions after drag ends
-                    saveLayout(); // Save layout after dragging ends
+                    hideGrid();
+                    event.target.style.zIndex = '';
+                    adjustCardPositions();
+                    saveLayout();
                 }
             },
             modifiers: [
@@ -98,7 +96,7 @@ function initializeInteract() {
                     relativePoints: [{ x: 1, y: 1 }]
                 }),
                 interact.modifiers.restrictEdges({
-                    outer: boundary // Use the boundary variable
+                    outer: boundary
                 })
             ]
         })
@@ -106,8 +104,8 @@ function initializeInteract() {
             edges: { left: true, right: true, bottom: true, top: true },
             listeners: {
                 start(event) {
-                    showGrid(); // Show grid when resizing starts
-                    event.target.style.zIndex = 1000; // Bring the card to the front
+                    showGrid();
+                    event.target.style.zIndex = 1000;
                 },
                 move(event) {
                     const target = event.target;
@@ -139,14 +137,14 @@ function initializeInteract() {
                     }
                 },
                 end(event) {
-                    hideGrid(); // Hide grid after resizing ends
-                    event.target.style.zIndex = ''; // Reset the z-index
-                    saveLayout(); // Save layout after resizing ends
+                    hideGrid();
+                    event.target.style.zIndex = '';
+                    saveLayout();
                 }
             },
             modifiers: [
                 interact.modifiers.restrictEdges({
-                    outer: boundary // Use the boundary variable
+                    outer: boundary
                 }),
                 interact.modifiers.restrictSize({
                     min: { width: 1, height: 1 },
@@ -160,6 +158,7 @@ function initializeInteract() {
             inertia: true,
         });
 }
+
 
 // Example of changing boundaries dynamically
 function updateBoundary(newBoundary) {

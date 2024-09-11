@@ -31,13 +31,6 @@
             width: 500px;
             height: 500px;
         }
-        .table-container {
-            max-height: 400px; /* Adjust the height as needed */
-            overflow-y: auto;
-            overflow-x: hidden;
-            border: 1px solid #ddd; /* Optional border for aesthetics */
-            margin-top: 20px;
-        }
     </style>
     <title>Analytics</title>
 </head>
@@ -99,7 +92,9 @@
                                     // Check if the query returned any columns
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
-                                            echo "<th>" . $row['Field'] . "</th>";
+                                            // Replace underscores with spaces
+                                            $columnName = str_replace('_', ' ', $row['Field']);
+                                            echo "<th>" . $columnName . "</th>";
                                         }
                                     } else {
                                         echo "<tr><td>No columns found</td></tr>";
