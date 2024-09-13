@@ -104,8 +104,8 @@
                             </thead>
                             <tbody>
                                 <?php
-                                // Query to select data from the table
-                                $sql = "SELECT * FROM Census_tb"; // Replace with your table name
+                                // Query to select data from the table, excluding rows with NULL in the 'Name' column
+                                $sql = "SELECT * FROM Census_tb WHERE Name IS NOT NULL"; // Replace with your table name
                                 $result = $conn->query($sql);
 
                                 // Check if there are rows
