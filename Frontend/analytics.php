@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../Frontend/css/fontawesome-free-6.6.0-web/css/all.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
     <link rel="stylesheet" href="css/analytics.css">
     <script src="scripts/scripts.js"></script>
@@ -76,23 +76,24 @@
                 <div class="card" id="dataTableCard">
                     <div class="card-header">
                         <h3>Data Table</h3>
-                        <button id="editBarChart" class="edit-button">Edit</button>
+                        <div class="table-controls">
+                            <input type="text" id="searchInput" placeholder="Search by NAME..." />
+                        </div>
                     </div>
+
                     <div class="table-container">
-                        <table>
+                        <table id="dataTable">
                             <thead>
                                 <tr>
                                     <?php
-                                    include "../Backend/connect.php";
+                                    include "../Backend/connect.php"; // Include your database connection
 
-                                    // Query to get the column names dynamically from the table
+                                    // Fetch column names
                                     $sql = "SHOW COLUMNS FROM Census_tb"; // Replace with your table name
                                     $result = $conn->query($sql);
 
-                                    // Check if the query returned any columns
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
-                                            // Replace underscores with spaces
                                             $columnName = str_replace('_', ' ', $row['Field']);
                                             echo "<th>" . $columnName . "</th>";
                                         }
@@ -104,16 +105,15 @@
                             </thead>
                             <tbody>
                                 <?php
-                                // Query to select data from the table, excluding rows with NULL in the 'Name' column
-                                $sql = "SELECT * FROM Census_tb WHERE Name IS NOT NULL"; // Replace with your table name
+                                // Fetch data from the table
+                                $sql = "SELECT * FROM Census_tb WHERE Name IS NOT NULL";
                                 $result = $conn->query($sql);
 
-                                // Check if there are rows
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
                                         foreach ($row as $data) {
-                                            echo "<td>" . $data . "</td>";
+                                            echo "<td>" . htmlspecialchars($data) . "</td>";
                                         }
                                         echo "</tr>";
                                     }
@@ -121,13 +121,13 @@
                                     echo "<tr><td colspan='10'>No data available</td></tr>";
                                 }
 
-                                // Close the connection
                                 $conn->close();
                                 ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
+
             </div>
         </div>
 

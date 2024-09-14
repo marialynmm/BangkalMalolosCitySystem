@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../Frontend/css/fontawesome-free-6.6.0-web/css/all.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="icon" href="images/logo.png" type="image/x-icon">
@@ -65,16 +65,16 @@
         }
 
 
-           // Query to get the count of males
-           $sql_female = "SELECT COUNT(*) as total_female FROM Census_tb WHERE GENDER = 'F'"; // Replace with your table name
-           $result_female = $conn->query($sql_female);
-   
-           // Fetch the result for male population
-           $female_count = 0;
-           if ($result_female->num_rows > 0) {
-               $row_female = $result_female->fetch_assoc();
-               $female_count = $row_female['total_female'];
-           }
+        // Query to get the count of males
+        $sql_female = "SELECT COUNT(*) as total_female FROM Census_tb WHERE GENDER = 'F'"; // Replace with your table name
+        $result_female = $conn->query($sql_female);
+
+        // Fetch the result for male population
+        $female_count = 0;
+        if ($result_female->num_rows > 0) {
+            $row_female = $result_female->fetch_assoc();
+            $female_count = $row_female['total_female'];
+        }
 
         // Close the connection
         $conn->close();
@@ -112,7 +112,7 @@
                             <i class="icon"><i class="fa-solid fa-venus"></i></i>
                             <div class="text-content">
                                 <h3>Female</h3>
-                                <p><?php echo $female_count?></p>
+                                <p><?php echo $female_count ?></p>
                             </div>
                         </div>
                     </div>

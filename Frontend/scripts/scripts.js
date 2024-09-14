@@ -8,6 +8,27 @@ function navigate(url) {
 // DRAG
 
 // Initialize Interact.js for draggable and resizable cards with snapping
+
+const defaultLayout = [
+    { "id": "pieChartCard", "x": 0, "y": 0, "width": 435, "height": 520 },
+    { "id": "barChartCard", "x": 0, "y": 0, "width": 428, "height": 520 },
+    { "id": "lineChartCard", "x": 225, "y": 0, "width": 883, "height": 520 },
+    { "id": "dataTableCard", "x": -676, "y": 550, "width": 1785, "height": 520 }
+];
+
+function applyDefaultLayout() {
+    defaultLayout.forEach(item => {
+        const card = document.getElementById(item.id);
+        if (card) {
+            card.style.width = `${item.width}px`;
+            card.style.height = `${item.height}px`;
+            card.style.transform = `translate(${item.x}px, ${item.y}px)`;
+            card.setAttribute('data-x', item.x);
+            card.setAttribute('data-y', item.y);
+        }
+    });
+}
+
 function initializeInteract() {
     // Define boundary variable
     const boundary = {
@@ -157,7 +178,30 @@ function initializeInteract() {
             ],
             inertia: true,
         });
+
+    // Apply default layout on initialization
+    applyDefaultLayout();
 }
+
+// Apply default layout
+function applyDefaultLayout() {
+    defaultLayout.forEach(item => {
+        const card = document.getElementById(item.id);
+        if (card) {
+            card.style.width = `${item.width}px`;
+            card.style.height = `${item.height}px`;
+            card.style.transform = `translate(${item.x}px, ${item.y}px)`;
+            card.setAttribute('data-x', item.x);
+            card.setAttribute('data-y', item.y);
+        }
+    });
+}
+
+// Ensure interact is initialized after the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeInteract();
+});
+
 
 
 // Example of changing boundaries dynamically
@@ -263,6 +307,26 @@ function initializeCharts() {
         }
     });
 }
+
+// TABLE
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const table = document.getElementById('dataTable');
+    const tbody = table.querySelector('tbody');
+
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.forEach(row => {
+            const cells = Array.from(row.querySelectorAll('td'));
+            const nameCell = cells[4]; // Assuming 'NAME' is the 5th column (index 4)
+            const match = nameCell && nameCell.textContent.toLowerCase().includes(searchTerm);
+
+            row.style.display = match ? '' : 'none';
+        });
+    });
+});
 
 function initializeSidebar() {
     const sidebar = document.getElementById('sidebar');

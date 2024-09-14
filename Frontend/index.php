@@ -17,6 +17,12 @@
             color: white;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
         }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -37,47 +43,43 @@
         <div class="modal-content">
             <button class="close-btn" id="closeModalBtn">&times;</button>
             <h1>Login</h1>
-            <form>
+            <form action="../Backend/login.php" method="post">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Enter your username">
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
                 </div>
-                <button type="submit" class="login-btn" id="login">Login</button>
+                <?php if (!empty($error_message)): ?>
+                    <div class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
+                <?php endif; ?>
+                <button type="submit" class="login-btn">Login</button>
             </form>
         </div>
     </div>
 
     <script>
-        //Login
-        document.getElementById('login').addEventListener('click', function (event) {
-            // Prevent form submission if you want to use this button outside a form
-            event.preventDefault();
+        //Login Open modal
+        document.addEventListener('DOMContentLoaded', () => {
+            const openModalBtn = document.getElementById('openModalBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const loginModal = document.getElementById('loginModal');
 
-            // Redirect to the Dashboard.html
-            window.location.href = 'dashboard.php';
-        });
+            openModalBtn.addEventListener('click', () => {
+                loginModal.style.display = 'flex';
+            });
 
-        // Open modal
-        const openModalBtn = document.getElementById('openModalBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const loginModal = document.getElementById('loginModal');
-
-        openModalBtn.addEventListener('click', () => {
-            loginModal.style.display = 'flex';
-        });
-
-        closeModalBtn.addEventListener('click', () => {
-            loginModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target === loginModal) {
+            closeModalBtn.addEventListener('click', () => {
                 loginModal.style.display = 'none';
-            }
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === loginModal) {
+                    loginModal.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>

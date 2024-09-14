@@ -157,6 +157,26 @@ h1 {
 }
 
 /*TABLE*/
+.table-controls {
+    margin-bottom: 10px;
+}
+
+#searchInput {
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+}
+
+#filterSelect,
+#filterValue {
+    margin-left: 10px;
+    padding: 5px;
+}
+
 .table-container {
     /* Adjust the height as needed */
     overflow-y: auto;
@@ -229,9 +249,28 @@ thead th {
 }
 
 .card-header {
+    color: black;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
+    /* Space out header text and search */
     align-items: center;
+}
+
+#searchInput {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-left: 20px;
+    /* Space between header and search bar */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+}
+
+#searchInput::placeholder {
+    color: #888;
+    font-style: italic;
 }
 
 .card canvas {
