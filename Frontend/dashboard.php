@@ -43,7 +43,7 @@
         <!-- PHP Code to Query Population Count -->
         <?php
         // Query to get the total population count
-        $sql = "SELECT SUM(No_of_Population) AS total_sum FROM census_tb;"; // Replace with your table name
+        $sql = "SELECT SUM(No_of_Population) AS total_sum FROM brgy_bangkal_record_census_final;"; // Replace with your table name
         $result = $conn->query($sql);
 
         // Fetch the result for population
@@ -54,7 +54,7 @@
         }
 
         // Query to get the count of males
-        $sql_male = "SELECT COUNT(*) as total_male FROM Census_tb WHERE GENDER = 'M'"; // Replace with your table name
+        $sql_male = "SELECT COUNT(*) as total_male FROM brgy_bangkal_record_census_final WHERE GENDER = 'M'"; // Replace with your table name
         $result_male = $conn->query($sql_male);
 
         // Fetch the result for male population
@@ -66,7 +66,7 @@
 
 
         // Query to get the count of males
-        $sql_female = "SELECT COUNT(*) as total_female FROM Census_tb WHERE GENDER = 'F'"; // Replace with your table name
+        $sql_female = "SELECT COUNT(*) as total_female FROM brgy_bangkal_record_census_final WHERE GENDER = 'F'"; // Replace with your table name
         $result_female = $conn->query($sql_female);
 
         // Fetch the result for male population

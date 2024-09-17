@@ -293,12 +293,12 @@ function initializeCharts() {
     lineChart = new Chart(ctxLine, {
         type: 'line',
         data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'],
+            labels: ['2019', '2020', '2021', '2022', '2023', '2024',],
             datasets: [{
                 label: 'Growth',
-                data: [12000, 12200, 12300, 12500, 12600, 12650, 12800, 12900, 13100],
+                data: [30000, 20000, 15000, 12000, 5000, 0,],
                 borderColor: '#FF6384',
-                fill: false
+                fill: true
             }]
         },
         options: {
