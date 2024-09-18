@@ -74,6 +74,39 @@
         if ($result_female->num_rows > 0) {
             $row_female = $result_female->fetch_assoc();
             $female_count = $row_female['total_female'];
+
+
+            if (isset($_POST['sort'])) {
+                // Get the selected years, services, and genders
+                $selected_years = isset($_POST['sort-year']) ? $_POST['sort-year'] : [];
+                $selected_services = isset($_POST['sort-service-type']) ? $_POST['sort-service-type'] : [];
+                $selected_genders = isset($_POST['sort-gender']) ? $_POST['sort-gender'] : [];
+            
+                // Convert arrays to comma-separated strings for SQL
+                $years_string = implode(",", $selected_years); // Handles years
+                $services_string = "'" . implode("','", $selected_services) . "'"; // Handles services
+                $genders_string = "'" . implode("','", $selected_genders) . "'"; // Handles genders
+            
+                // Construct the query
+                $sql = "SELECT SUM(`$years_string`) AS total_sort 
+                        FROM DataWithServices 
+                        WHERE Community_Services IN ($services_string) 
+                        AND Gender IN ($genders_string);";
+            
+                $result = $conn->query($sql);
+            
+                // Fetch the result for population
+                $sort_sum = 0;
+                if ($result && $result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $sort_sum = $row['total_sort'];
+                } else {
+                    // Handle the case where no results are found
+                    $sort_sum = "No data found";
+                }
+            }
+            
+            
         }
 
         // Close the connection
@@ -118,70 +151,80 @@
                     </div>
                     <div class="card">
 
-                        <div class="card-content">
+                    <form method="POST">
+    <div class="card-content">
 
-                            <div class="sorting-checkbox">
-                                <h4>Sort Community Services By:</h4>
+        <div class="sorting-checkbox">
+            <h4>Sort Community Services By:</h4>
 
-                                <fieldset>
-                                    <legend>Year</legend>
-                                    <label>
-                                        <input type="checkbox" id="sort-year-2021" name="sort-year">
-                                        2021
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" id="sort-year-2022" name="sort-year">
-                                        2022
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" id="sort-year-2023" name="sort-year">
-                                        2023
-                                    </label>
-                                </fieldset>
+            <fieldset>
+                <legend>Year</legend>
+                <label>
+                    <input type="checkbox" id="sort-year-2021" name="sort-year[]" value="2021">
+                    2021
+                </label>
+                <label>
+                    <input type="checkbox" id="sort-year-2022" name="sort-year[]" value="2022">
+                    2022
+                </label>
+                <label>
+                    <input type="checkbox" id="sort-year-2023" name="sort-year[]" value="2023">
+                    2023
+                </label>
+            </fieldset>
 
-                                <fieldset>
-                                    <legend>Type of Services</legend>
-                                    <label>
-                                        <input type="checkbox" id="sort-service-type-education" name="sort-service-type">
-                                        Daycare & Kinder Feeding Program
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" id="sort-service-type-health" name="sort-service-type">
-                                        Free Circumsition Operation
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" id="sort-service-type-environment" name="sort-service-type">
-                                        Free Dental Check-Up & Tooth Extraction 
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" id="sort-service-type-environment" name="sort-service-type">
-                                        Condom Distribution Program
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" id="sort-service-type-environment" name="sort-service-type">
-                                        Anti-Teenage Pregnancy Program
-                                    </label>
-                                </fieldset>
+            <fieldset>
+                <legend>Type of Services</legend>
+                <label>
+                    <input type="checkbox" id="sort-service-type-education" name="sort-service-type[]" value="Daycare & Kinder Feeding Program">
+                    Daycare & Kinder Feeding Program
+                </label>
+                <label>
+                    <input type="checkbox" id="sort-service-type-health" name="sort-service-type[]" value="Free Circumsition Operation">
+                    Free Circumsition Operation
+                </label>
+                <label>
+                    <input type="checkbox" id="sort-service-type-environment" name="sort-service-type[]" value="Free Dental Check-Up & Tooth Extraction">
+                    Free Dental Check-Up & Tooth Extraction
+                </label>
+                <label>
+                    <input type="checkbox" id="sort-service-type-condom" name="sort-service-type[]" value="Condom Distribution Program">
+                    Condom Distribution Program
+                </label>
+                <label>
+                    <input type="checkbox" id="sort-service-type-pregnancy" name="sort-service-type[]" value="Anti-Teenage Pregnancy Program">
+                    Anti-Teenage Pregnancy Program
+                </label>
+            </fieldset>
 
-                                <fieldset>
-                                    <legend>Gender</legend>
-                                    <label>
-                                        <input type="checkbox" id="sort-gender-male" name="sort-gender">
-                                        Male
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" id="sort-gender-female" name="sort-gender">
-                                        Female
-                                    </label>
-                                </fieldset>
-                            </div>
-                        </div>
+            <fieldset>
+                <legend>Gender</legend>
+                <label>
+                    <input type="checkbox" id="sort-gender-male" name="sort-gender[]" value="M">
+                    Male
+                </label>
+                <label>
+                    <input type="checkbox" id="sort-gender-female" name="sort-gender[]" value="F">
+                    Female
+                </label>
+            </fieldset>
+        </div>
+
+        <button type="submit" name="sort" id="sort">Sort</button>
+
+    </div>
+</form>
+
+
+
+
+
                         <div class="card-categoires">
                             <div class="card-content">
                                 <i class="icon"><i class="fa-solid fa-table"></i></i>
                                 <div class="text-content">
                                     <h4 id="selected-title">Choose Type of Service</h4>
-                                    <p id="selected-count">0</p>
+                                    <p id="selected-count"><?php echo $sort_sum ?></p>
                                 </div>
                             </div>
                         </div>
