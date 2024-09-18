@@ -16,6 +16,26 @@ body {
     transition: margin-left 0.3s;
 }
 
+.sorting-checkbox label {
+    display: block;
+}
+
+.sorting-checkbox input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+fieldset {
+    border: none;
+    margin-bottom: 15px;
+    padding: 0;
+}
+
+legend {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
 .sidebar img {
     width: 100%;
     height: auto;
@@ -100,9 +120,7 @@ h1 {
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 600px;
     /* Maximum width to prevent overflow */
-    height: 200px;
     /* Height will be adjusted based on content */
     display: flex;
     flex-direction: column;
@@ -196,17 +214,35 @@ h1 {
     background-color: #7944ce;
     /* Red */
 }
+
 .card:nth-child(7) {
     background-color: #dd5fe9;
     /* Red */
 }
+
 .card:nth-child(8) {
     background-color: #96e2dc;
     /* Red */
 }
+
 .card:nth-child(9) {
     background-color: #c2ee70;
     /* Red */
+}
+
+.card-categoires{
+    background-color: #8d683162;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    /* Maximum width to prevent overflow */
+    /* Height will be adjusted based on content */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
 }
 
 @media (max-width: 768px) {

@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = "Username and password are required.";
     } else {
         // Prepare SQL query to fetch user details
-        $stmt = $conn->prepare("SELECT user_id, username, password FROM user_tb WHERE username = ?");
+        $stmt = $conn->prepare("SELECT ID, user_name, password FROM user_tb WHERE user_name = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Verify plain text password
             if ($password === $user['password']) {
                 // Set session variables
-                $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['user_id'] = $user['ID'];
                 $_SESSION['username'] = $user['username'];
 
                 // Redirect to a protected page (e.g., dashboard)
@@ -58,4 +58,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: ../Frontend/index.php");
     exit();
 }
-?>

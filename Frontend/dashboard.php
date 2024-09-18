@@ -117,41 +117,76 @@
                         </div>
                     </div>
                     <div class="card">
+
                         <div class="card-content">
-                            <i class="icon"><i class="fa-solid fa-check-to-slot"></i></i>
-                            <div class="text-content">
-                                <h3>Voters</h3>
-                                <p>32,450</p>
+
+                            <div class="sorting-checkbox">
+                                <h4>Sort Community Services By:</h4>
+
+                                <fieldset>
+                                    <legend>Year</legend>
+                                    <label>
+                                        <input type="checkbox" id="sort-year-2021" name="sort-year">
+                                        2021
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="sort-year-2022" name="sort-year">
+                                        2022
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="sort-year-2023" name="sort-year">
+                                        2023
+                                    </label>
+                                </fieldset>
+
+                                <fieldset>
+                                    <legend>Type of Services</legend>
+                                    <label>
+                                        <input type="checkbox" id="sort-service-type-education" name="sort-service-type">
+                                        Daycare & Kinder Feeding Program
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="sort-service-type-health" name="sort-service-type">
+                                        Free Circumsition Operation
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="sort-service-type-environment" name="sort-service-type">
+                                        Free Dental Check-Up & Tooth Extraction 
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="sort-service-type-environment" name="sort-service-type">
+                                        Condom Distribution Program
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="sort-service-type-environment" name="sort-service-type">
+                                        Anti-Teenage Pregnancy Program
+                                    </label>
+                                </fieldset>
+
+                                <fieldset>
+                                    <legend>Gender</legend>
+                                    <label>
+                                        <input type="checkbox" id="sort-gender-male" name="sort-gender">
+                                        Male
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="sort-gender-female" name="sort-gender">
+                                        Female
+                                    </label>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="card-categoires">
+                            <div class="card-content">
+                                <i class="icon"><i class="fa-solid fa-table"></i></i>
+                                <div class="text-content">
+                                    <h4 id="selected-title">Choose Type of Service</h4>
+                                    <p id="selected-count">0</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-content">
-                            <i class="icon"><i class="fa-solid fa-circle-xmark"></i></i>
-                            <div class="text-content">
-                                <h3>Non Voters</h3>
-                                <p>32,450</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-content">
-                            <i class="icon"><i class="fa-solid fa-syringe"></i></i>
-                            <div class="text-content">
-                                <h3>Vaccinated</h3>
-                                <p>32,450</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-content">
-                            <i class="icon"><i class="fa-regular fa-syringe"></i></i>
-                            <div class="text-content">
-                                <h3>Not Vaccinated</h3>
-                                <p>32,450</p>
-                            </div>
-                        </div>
-                    </div>
+
                 </section>
             </div>
         </div>

@@ -3,7 +3,7 @@
 $host = "localhost";
 $user = "root";
 $password = "";
-$db = "brgy_bankal_db";
+$db = "brgy_bangkal_db";
 
 $conn = new mysqli($host,$user,$password,$db);
 

@@ -433,8 +433,72 @@ function restoreLayout() {
     }
 }
 
+//DASHBOARD CATEGORIES
+function servicesSorting() {
+    const checkboxes = document.querySelectorAll('.sorting-checkbox input[type="checkbox"]');
+
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', function () {
+            const categoryName = this.closest('fieldset').querySelector('legend').textContent;
+
+            if (categoryName !== 'Gender') { // Only hide others if not in the gender category
+                // Hide the checkbox of the category selected
+                if (this.checked) {
+                    checkboxes.forEach((cb) => {
+                        if (cb !== this && cb.closest('fieldset').querySelector('legend').textContent === categoryName) {
+                            cb.parentElement.style.display = 'none'; // Hide the other checkboxes in the same category
+                        }
+                    });
+                } else {
+                    // Show all checkboxes again if unchecked
+                    checkboxes.forEach((cb) => {
+                        if (cb.closest('fieldset').querySelector('legend').textContent === categoryName) {
+                            cb.parentElement.style.display = 'block'; // Show checkboxes in the same category
+                        }
+                    });
+                }
+            } else {
+                // For Gender category, allow multiple selections, show all checkboxes
+                if (!this.checked) {
+                    // When unchecked, show all gender checkboxes again
+                    checkboxes.forEach((cb) => {
+                        if (cb.closest('fieldset').querySelector('legend').textContent === categoryName) {
+                            cb.parentElement.style.display = 'block'; // Show gender checkboxes
+                        }
+                    });
+                }
+            }
+        });
+    });
+}
+//DASHBOARD SERVICES
+function updateServicesCount() {
+    document.querySelectorAll('.sorting-checkbox input[name="sort-service-type"]').forEach((checkbox) => {
+        checkbox.addEventListener('change', updateVoterCount);
+    });
+
+    function updateVoterCount() {
+        const selectedCheckboxes = document.querySelectorAll('.sorting-checkbox input[name="sort-service-type"]:checked');
+
+        let selectedServices = [];
+
+        selectedCheckboxes.forEach((checkbox) => {
+            selectedServices.push(checkbox.parentElement.textContent.trim());
+        });
+
+        // Update the text based on selected services
+        const selectedTitle = selectedServices.length > 0 ? selectedServices.join(', ') : '';
+        document.getElementById('selected-title').textContent = selectedTitle;
+        if (selectedServices.length > 0) {
+            selectedTitle.style.text = 'Choose Type of Services'; // Show title
+        }
+    }
+}
+
 // Combine initialization functions into a single DOMContentLoaded event
 document.addEventListener('DOMContentLoaded', () => {
+    servicesSorting();
+    updateServicesCount();
     initializeInteract();
     const pieChart = initializeCharts(); // Initialize charts and get pieChart instance
     initializeSidebar();
