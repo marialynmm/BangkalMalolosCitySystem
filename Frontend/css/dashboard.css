@@ -125,7 +125,7 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: start;
+    align-items: center;
 }
 
 
@@ -167,7 +167,105 @@ h1 {
 
 .card canvas {
     width: 100% !important;
-    height: 400px !important;
+    height: 500px !important;
+}
+
+.filters {
+    color: #333;
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    margin-bottom: 10px; /* Space below the filters */
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between elements */
+}
+
+select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+select:focus {
+    border-color: #36A2EB; /* Change border color on focus */
+    outline: none;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    margin: 5px 0; /* Space between checkboxes */
+    font-size: 16px; /* Font size for labels */
+}
+
+input[type="checkbox"] {
+    margin-right: 5px; /* Space between checkbox and label */
+}
+
+@media (min-width: 600px) {
+    .filter-group {
+        flex-direction: row; /* Change to row layout on larger screens */
+        gap: 20px; /* Increase space between elements */
+    }
+}
+
+.filters select {
+    margin-right: 10px; /* Space between year and service dropdowns */
+}
+
+#genderSelect {
+    display: flex; /* Align gender checkboxes inline */
+    align-items: center; /* Center checkboxes vertically */
+}
+
+#genderSelect label {
+    margin-right: 10px; /* Space between labels */
+}
+
+.chart-title {
+    color: #333; /* Text color */
+    text-align: center; /* Center the title text */
+    font-size: 32px; /* Set font size */
+    margin-bottom: 10px; /* Space below the title */
+}
+
+.chartjs-legend {
+    text-align: center;
+    /* Center the legend */
+    margin-top: 10px;
+    /* Space above the legend */
+}
+
+.chartjs-legend li {
+    list-style-type: none;
+    /* Remove bullet points */
+    margin: 5px 0;
+    /* Space between legend items */
+    font-size: 18px;
+    /* Set font size */
+    color: #333;
+    /* Set text color */
+}
+
+.chartjs-legend li span {
+    margin-right: 8px;
+    /* Space between the color box and label */
+}
+
+.chartjs-legend li .legend-color {
+    display: inline-block;
+    /* Ensure color boxes align properly */
+    width: 20px;
+    /* Set width for color boxes */
+    height: 20px;
+    /* Set height for color boxes */
+    border-radius: 3px;
+    /* Round the corners of the color boxes */
 }
 
 .edit-button {
@@ -196,12 +294,13 @@ h1 {
 }
 
 .card:nth-child(3) {
-    background-color: #f44336;
+    background-color: #ff6384;
     /* Red */
 }
 
 .card:nth-child(4) {
-    background-color: #d6a640;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     /* Red */
 }
 
@@ -230,7 +329,7 @@ h1 {
     /* Red */
 }
 
-.card-categoires{
+.card-categoires {
     background-color: #8d683162;
     color: #ffffff;
     border-radius: 8px;

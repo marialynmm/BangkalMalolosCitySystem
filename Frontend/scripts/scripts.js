@@ -1,19 +1,14 @@
-
 function navigate(url) {
     window.location.href = url;
 }
 
-
-
 // DRAG
 
 // Initialize Interact.js for draggable and resizable cards with snapping
-
 const defaultLayout = [
-    { "id": "pieChartCard", "x": 0, "y": 0, "width": 435, "height": 520 },
-    { "id": "barChartCard", "x": 0, "y": 0, "width": 428, "height": 520 },
-    { "id": "lineChartCard", "x": 225, "y": 0, "width": 883, "height": 520 },
-    { "id": "dataTableCard", "x": -676, "y": 550, "width": 1785, "height": 520 }
+    { "id": "barChartCard", "x": 0, "y": 0, "width": 438, "height": 521 },
+    { "id": "lineChartCard", "x": 450, "y": 0, "width": 1325, "height": 520 },
+    { "id": "dataTableCard", "x": -230, "y": 550, "width": 1781, "height": 520 }
 ];
 
 function applyDefaultLayout() {
@@ -30,7 +25,6 @@ function applyDefaultLayout() {
 }
 
 function initializeInteract() {
-    // Define boundary variable
     const boundary = {
         top: 20,
         left: 80,
@@ -46,12 +40,12 @@ function initializeInteract() {
 
     function showGrid() {
         gridOverlay.style.display = 'block';
-        toolTip.style.display = 'block'; // Use 'block' to make the tooltip visible
+        toolTip.style.display = 'block';
     }
 
     function hideGrid() {
         gridOverlay.style.display = 'none';
-        toolTip.style.display = 'none'; // Use 'none' to hide the tooltip
+        toolTip.style.display = 'none';
     }
 
     function adjustCardPositions() {
@@ -153,8 +147,8 @@ function initializeInteract() {
                     // Auto-fit content
                     const content = target.querySelector('.card-content');
                     if (content) {
-                        content.style.width = `${newWidth - 1}px`; // Adjust padding
-                        content.style.height = `${newHeight - 1}px`; // Adjust padding
+                        content.style.width = `${newWidth - 1}px`;
+                        content.style.height = `${newHeight - 1}px`;
                     }
                 },
                 end(event) {
@@ -183,26 +177,10 @@ function initializeInteract() {
     applyDefaultLayout();
 }
 
-// Apply default layout
-function applyDefaultLayout() {
-    defaultLayout.forEach(item => {
-        const card = document.getElementById(item.id);
-        if (card) {
-            card.style.width = `${item.width}px`;
-            card.style.height = `${item.height}px`;
-            card.style.transform = `translate(${item.x}px, ${item.y}px)`;
-            card.setAttribute('data-x', item.x);
-            card.setAttribute('data-y', item.y);
-        }
-    });
-}
-
 // Ensure interact is initialized after the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     initializeInteract();
 });
-
-
 
 // Example of changing boundaries dynamically
 function updateBoundary(newBoundary) {
@@ -215,38 +193,17 @@ updateBoundary({ top: 0, left: 0, right: 800, bottom: 600 });
 
 // CHARTS
 
-let pieChart; // Declare chart variables outside functions for global access
 let barChart;
 let lineChart;
 
 function initializeCharts() {
     // Destroy existing charts if they exist
-    if (pieChart && pieChart.destroy) {
-        pieChart.destroy();
-    }
     if (barChart && barChart.destroy) {
         barChart.destroy();
     }
     if (lineChart && lineChart.destroy) {
         lineChart.destroy();
     }
-
-    // Initialize Pie Chart
-    const ctxPie = document.getElementById('pieChart').getContext('2d');
-    pieChart = new Chart(ctxPie, {
-        type: 'pie',
-        data: {
-            labels: ['Vaccinated', 'Not Vaccinated', 'Booster Vaccinated'],
-            datasets: [{
-                data: [300, 50, 100],
-                backgroundColor: ['#6aa84f', '#d0d0d0', '#FFCE56']
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
 
     // Initialize Bar Chart
     const ctxBar = document.getElementById('barChart').getContext('2d');
@@ -293,10 +250,10 @@ function initializeCharts() {
     lineChart = new Chart(ctxLine, {
         type: 'line',
         data: {
-            labels: ['2019', '2020', '2021', '2022', '2023', '2024',],
+            labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
             datasets: [{
                 label: 'Growth',
-                data: [30000, 20000, 15000, 12000, 5000, 0,],
+                data: [30000, 20000, 15000, 12000, 5000, 0],
                 borderColor: '#FF6384',
                 fill: true
             }]
@@ -352,47 +309,6 @@ function initializeSidebar() {
     });
 }
 
-function initializeModal(pieChart) {
-    const modal = document.getElementById("editModal");
-    const btn = document.getElementById("editPieChart");
-    const span = document.getElementsByClassName("close")[0];
-    const updateButton = document.getElementById('updateChart');
-    const cancelButton = document.getElementById('cancelEdit');
-
-    btn.onclick = () => {
-        modal.style.display = "block";
-    };
-
-    span.onclick = () => {
-        modal.style.display = "none";
-    };
-
-    window.onclick = (event) => {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
-
-    // Update Chart Function
-    function updateChart() {
-        const vaccinated = parseInt(document.getElementById('vaccinated').value, 10) || 0;
-        const notVaccinated = parseInt(document.getElementById('notVaccinated').value, 10) || 0;
-        const boosterVaccinated = parseInt(document.getElementById('boosterVaccinated').value, 10) || 0;
-
-        pieChart.data.datasets[0].data = [vaccinated, notVaccinated, boosterVaccinated];
-        pieChart.update();
-    }
-
-    updateButton.addEventListener('click', () => {
-        updateChart();
-        modal.style.display = "none";
-    });
-
-    cancelButton.addEventListener('click', () => {
-        modal.style.display = "none";
-    });
-}
-
 // Function to save card layout
 function saveLayout() {
     const cards = document.querySelectorAll('.card');
@@ -433,75 +349,11 @@ function restoreLayout() {
     }
 }
 
-//DASHBOARD CATEGORIES
-function servicesSorting() {
-    const checkboxes = document.querySelectorAll('.sorting-checkbox input[type="checkbox"]');
-
-    checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener('change', function () {
-            const categoryName = this.closest('fieldset').querySelector('legend').textContent;
-
-            if (categoryName !== 'Gender') { // Only hide others if not in the gender category
-                // Hide the checkbox of the category selected
-                if (this.checked) {
-                    checkboxes.forEach((cb) => {
-                        if (cb !== this && cb.closest('fieldset').querySelector('legend').textContent === categoryName) {
-                            cb.parentElement.style.display = 'none'; // Hide the other checkboxes in the same category
-                        }
-                    });
-                } else {
-                    // Show all checkboxes again if unchecked
-                    checkboxes.forEach((cb) => {
-                        if (cb.closest('fieldset').querySelector('legend').textContent === categoryName) {
-                            cb.parentElement.style.display = 'block'; // Show checkboxes in the same category
-                        }
-                    });
-                }
-            } else {
-                // For Gender category, allow multiple selections, show all checkboxes
-                if (!this.checked) {
-                    // When unchecked, show all gender checkboxes again
-                    checkboxes.forEach((cb) => {
-                        if (cb.closest('fieldset').querySelector('legend').textContent === categoryName) {
-                            cb.parentElement.style.display = 'block'; // Show gender checkboxes
-                        }
-                    });
-                }
-            }
-        });
-    });
-}
-//DASHBOARD SERVICES
-function updateServicesCount() {
-    document.querySelectorAll('.sorting-checkbox input[name="sort-service-type"]').forEach((checkbox) => {
-        checkbox.addEventListener('change', updateVoterCount);
-    });
-
-    function updateVoterCount() {
-        const selectedCheckboxes = document.querySelectorAll('.sorting-checkbox input[name="sort-service-type"]:checked');
-
-        let selectedServices = [];
-
-        selectedCheckboxes.forEach((checkbox) => {
-            selectedServices.push(checkbox.parentElement.textContent.trim());
-        });
-
-        // Update the text based on selected services
-        const selectedTitle = selectedServices.length > 0 ? selectedServices.join(', ') : '';
-        document.getElementById('selected-title').textContent = selectedTitle;
-        if (selectedServices.length > 0) {
-            selectedTitle.style.text = 'Choose Type of Services'; // Show title
-        }
-    }
-}
 
 // Combine initialization functions into a single DOMContentLoaded event
 document.addEventListener('DOMContentLoaded', () => {
-    servicesSorting();
-    updateServicesCount();
     initializeInteract();
-    const pieChart = initializeCharts(); // Initialize charts and get pieChart instance
+    initializeCharts(); // Initialize charts without pieChart
     initializeSidebar();
-    initializeModal(pieChart);
     restoreLayout();
 });

@@ -48,14 +48,6 @@
         <div class="content" id="content">
             <!-- <h1>Barangay Bangkal</h1> -->
             <div class="dashboard">
-                <!-- Pie Chart Card -->
-                <div class="card" id="pieChartCard">
-                    <div class="card-header">
-                        <h3 class="card-title">Vaccine Doses</h3>
-                        <button id="editPieChart" class="edit-button">Edit</button>
-                    </div>
-                    <canvas id="pieChart"></canvas>
-                </div>
                 <!-- Bar Chart Card -->
                 <div class="card" id="barChartCard">
                     <div class="card-header">

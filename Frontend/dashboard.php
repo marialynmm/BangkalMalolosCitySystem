@@ -11,8 +11,9 @@
     <link rel="icon" href="images/logo.png" type="image/x-icon">
     <script src="scripts/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
+    <title>Dashboard</title>
     <style>
         .logo-stamp {
             position: fixed;
@@ -37,206 +38,182 @@
         <img src="images/logo.png" alt="Logo">
     </div>
     <div class="container">
-        <!-- Sidebar -->
         <?php include 'includes/sidebar.php'; ?>
 
         <!-- PHP Code to Query Population Count -->
         <?php
-        // Query to get the total population count
-        $sql = "SELECT SUM(No_of_Population) AS total_sum FROM brgy_bangkal_record_census_final;"; // Replace with your table name
+        // Query to get population counts
+        $sql = "SELECT SUM(No_of_Population) AS total_sum FROM brgy_bangkal_record_census_final;";
         $result = $conn->query($sql);
+        $population = $result->fetch_assoc()['total_sum'] ?? 0;
 
-        // Fetch the result for population
-        $population = 0;
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            $population = $row['total_sum'];
-        }
-
-        // Query to get the count of males
-        $sql_male = "SELECT COUNT(*) as total_male FROM brgy_bangkal_record_census_final WHERE GENDER = 'M'"; // Replace with your table name
+        // Count of males
+        $sql_male = "SELECT COUNT(*) as total_male FROM brgy_bangkal_record_census_final WHERE GENDER = 'M';";
         $result_male = $conn->query($sql_male);
+        $male_count = $result_male->fetch_assoc()['total_male'] ?? 0;
 
-        // Fetch the result for male population
-        $male_count = 0;
-        if ($result_male->num_rows > 0) {
-            $row_male = $result_male->fetch_assoc();
-            $male_count = $row_male['total_male'];
-        }
-
-
-        // Query to get the count of males
-        $sql_female = "SELECT COUNT(*) as total_female FROM brgy_bangkal_record_census_final WHERE GENDER = 'F'"; // Replace with your table name
+        // Count of females
+        $sql_female = "SELECT COUNT(*) as total_female FROM brgy_bangkal_record_census_final WHERE GENDER = 'F';";
         $result_female = $conn->query($sql_female);
-
-        // Fetch the result for male population
-        $female_count = 0;
-        if ($result_female->num_rows > 0) {
-            $row_female = $result_female->fetch_assoc();
-            $female_count = $row_female['total_female'];
-
-
-            if (isset($_POST['sort'])) {
-                // Get the selected years, services, and genders
-                $selected_years = isset($_POST['sort-year']) ? $_POST['sort-year'] : [];
-                $selected_services = isset($_POST['sort-service-type']) ? $_POST['sort-service-type'] : [];
-                $selected_genders = isset($_POST['sort-gender']) ? $_POST['sort-gender'] : [];
-            
-                // Convert arrays to comma-separated strings for SQL
-                $years_string = implode(",", $selected_years); // Handles years
-                $services_string = "'" . implode("','", $selected_services) . "'"; // Handles services
-                $genders_string = "'" . implode("','", $selected_genders) . "'"; // Handles genders
-            
-                // Construct the query
-                $sql = "SELECT SUM(`$years_string`) AS total_sort 
-                        FROM DataWithServices 
-                        WHERE Community_Services IN ($services_string) 
-                        AND Gender IN ($genders_string);";
-            
-                $result = $conn->query($sql);
-            
-                // Fetch the result for population
-                $sort_sum = 0;
-                if ($result && $result->num_rows > 0) {
-                    $row = $result->fetch_assoc();
-                    $sort_sum = $row['total_sort'];
-                } else {
-                    // Handle the case where no results are found
-                    $sort_sum = "No data found";
-                }
-            }
-            
-            
-        }
+        $female_count = $result_female->fetch_assoc()['total_female'] ?? 0;
 
         // Close the connection
         $conn->close();
         ?>
 
-        <!-- Content -->
         <div class="content" id="content">
             <div class="main-content">
                 <section class="dashboard">
-                    <!-- Population Card with Dynamic Data -->
+                    <!-- Population Cards -->
                     <div class="card">
-                        <div class="card-content">
-                            <i class="icon"><i class="fa-solid fa-chart-pie"></i></i>
+                        <div class="card-content"><i class="icon"><i class="fa-solid fa-chart-pie"></i></i>
                             <div class="text-content">
                                 <h3>Population</h3>
                                 <p><?php echo $population; ?></p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Male Population Card with Dynamic Data -->
                     <div class="card">
-                        <div class="card-content">
-                            <i class="icon"><i class="fa-solid fa-mars"></i></i>
+                        <div class="card-content"><i class="icon"><i class="fa-solid fa-mars"></i></i>
                             <div class="text-content">
                                 <h3>Male</h3>
                                 <p><?php echo $male_count; ?></p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Other Cards -->
                     <div class="card">
-                        <div class="card-content">
-                            <i class="icon"><i class="fa-solid fa-venus"></i></i>
+                        <div class="card-content"><i class="icon"><i class="fa-solid fa-venus"></i></i>
                             <div class="text-content">
                                 <h3>Female</h3>
-                                <p><?php echo $female_count ?></p>
+                                <p><?php echo $female_count; ?></p>
                             </div>
                         </div>
                     </div>
+
                     <div class="card">
-
-                    <form method="POST">
-    <div class="card-content">
-
-        <div class="sorting-checkbox">
-            <h4>Sort Community Services By:</h4>
-
-            <fieldset>
-                <legend>Year</legend>
-                <label>
-                    <input type="checkbox" id="sort-year-2021" name="sort-year[]" value="2021">
-                    2021
-                </label>
-                <label>
-                    <input type="checkbox" id="sort-year-2022" name="sort-year[]" value="2022">
-                    2022
-                </label>
-                <label>
-                    <input type="checkbox" id="sort-year-2023" name="sort-year[]" value="2023">
-                    2023
-                </label>
-            </fieldset>
-
-            <fieldset>
-                <legend>Type of Services</legend>
-                <label>
-                    <input type="checkbox" id="sort-service-type-education" name="sort-service-type[]" value="Daycare & Kinder Feeding Program">
-                    Daycare & Kinder Feeding Program
-                </label>
-                <label>
-                    <input type="checkbox" id="sort-service-type-health" name="sort-service-type[]" value="Free Circumsition Operation">
-                    Free Circumsition Operation
-                </label>
-                <label>
-                    <input type="checkbox" id="sort-service-type-environment" name="sort-service-type[]" value="Free Dental Check-Up & Tooth Extraction">
-                    Free Dental Check-Up & Tooth Extraction
-                </label>
-                <label>
-                    <input type="checkbox" id="sort-service-type-condom" name="sort-service-type[]" value="Condom Distribution Program">
-                    Condom Distribution Program
-                </label>
-                <label>
-                    <input type="checkbox" id="sort-service-type-pregnancy" name="sort-service-type[]" value="Anti-Teenage Pregnancy Program">
-                    Anti-Teenage Pregnancy Program
-                </label>
-            </fieldset>
-
-            <fieldset>
-                <legend>Gender</legend>
-                <label>
-                    <input type="checkbox" id="sort-gender-male" name="sort-gender[]" value="M">
-                    Male
-                </label>
-                <label>
-                    <input type="checkbox" id="sort-gender-female" name="sort-gender[]" value="F">
-                    Female
-                </label>
-            </fieldset>
-        </div>
-
-        <button type="submit" name="sort" id="sort">Sort</button>
-
-    </div>
-</form>
-
-
-
-
-
-                        <div class="card-categoires">
-                            <div class="card-content">
-                                <i class="icon"><i class="fa-solid fa-table"></i></i>
-                                <div class="text-content">
-                                    <h4 id="selected-title">Choose Type of Service</h4>
-                                    <p id="selected-count"><?php echo $sort_sum ?></p>
+                        <h3 class="chart-title">Services</h3>
+                        <div class="filters">
+                            <div class="filter-group">
+                                <select id="yearSelect">
+                                    <option value="">Select Year</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                </select>
+                                <select id="serviceSelect">
+                                    <option value="">Select Service</option>
+                                    <option value="Service1">Feeding Program</option>
+                                    <option value="Service2">Pregnancy Prevention</option>
+                                </select>
+                                <div id="genderSelect">
+                                    <label><input type="checkbox" value="M"> Male</label>
+                                    <label><input type="checkbox" value="F"> Female</label>
                                 </div>
                             </div>
                         </div>
+                        <canvas id="populationChart" width="400" height="400"></canvas>
                     </div>
-
                 </section>
             </div>
         </div>
 
-        <!-- Footer -->
-        <!-- <?php include 'includes/footer.php'; ?> -->
+        <script>
+            const ctx = document.getElementById('populationChart').getContext('2d');
+            const populationChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Male', 'Female'],
+                    datasets: [{
+                        label: 'Population by Gender',
+                        data: [<?php echo $male_count; ?>, <?php echo $female_count; ?>],
+                        backgroundColor: ['#36A2EB', '#FF6384'],
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                padding: 10
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (tooltipItem) => {
+                                    return `${tooltipItem.label}: ${tooltipItem.raw}`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            anchor: 'center',
+                            align: 'center',
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((acc, val) => acc + val, 0);
+                                return value / total > 0.05 ? value : ''; // Only show if it's a significant portion
+                            },
+                            font: {
+                                size: 14,
+                                weight: 'bold',
+                                family: 'Poppins, sans-serif'
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels] // Register the plugin
+            });
 
+            // Update chart based on selected filters (if required)
+            function updateChart() {
+                const selectedService = document.getElementById('serviceSelect').value;
+                const maleChecked = document.querySelector('input[value="M"]').checked;
+                const femaleChecked = document.querySelector('input[value="F"]').checked;
+
+                const data = [];
+                const labels = [];
+                const backgroundColors = [];
+
+                // If no gender is selected, show both
+                if (!maleChecked && !femaleChecked) {
+                    labels.push('Male', 'Female');
+                    data.push(<?php echo $male_count; ?>, <?php echo $female_count; ?>);
+                    backgroundColors.push('#36A2EB', '#FF6384'); // Both colors
+                } else {
+                    if (maleChecked) {
+                        labels.push('Male');
+                        data.push(<?php echo $male_count; ?>);
+                        backgroundColors.push('#36A2EB'); // Male color
+                    }
+                    if (femaleChecked) {
+                        labels.push('Female');
+                        data.push(<?php echo $female_count; ?>);
+                        backgroundColors.push('#FF6384'); // Female color
+                    }
+                }
+
+                if (data.length > 0) {
+                    populationChart.data.labels = labels;
+                    populationChart.data.datasets[0].data = data;
+                    populationChart.data.datasets[0].backgroundColor = backgroundColors; // Update colors
+                    populationChart.update();
+                } else {
+                    // Clear chart if no data to show
+                    populationChart.data.labels = [];
+                    populationChart.data.datasets[0].data = [];
+                    populationChart.data.datasets[0].backgroundColor = []; // Clear colors
+                    populationChart.update();
+                }
+            }
+            // Event listeners
+            document.getElementById('serviceSelect').addEventListener('change', updateChart);
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updateChart);
+            });
+        </script>
+    </div>
 </body>
 
 </html>
