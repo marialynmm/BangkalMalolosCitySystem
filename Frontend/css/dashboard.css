@@ -173,14 +173,30 @@ h1 {
 .filters {
     color: #333;
     display: flex;
-    flex-direction: column; /* Stack items vertically */
-    margin-bottom: 10px; /* Space below the filters */
+    flex-direction: column;
+    /* Stack items vertically */
+    margin-bottom: 10px;
+    /* Space below the filters */
 }
 
 .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Space between elements */
+    gap: 10px;
+    /* Space between elements */
+}
+
+#serviceSelect {
+    max-width: 200px;
+    /* Set a maximum width */
+    width: 100%;
+    /* Make it responsive */
+    overflow: hidden;
+    /* Prevent overflow */
+    white-space: nowrap;
+    /* Prevent text wrapping */
+    text-overflow: ellipsis;
+    /* Add ellipsis for long text */
 }
 
 select {
@@ -192,46 +208,64 @@ select {
 }
 
 select:focus {
-    border-color: #36A2EB; /* Change border color on focus */
+    border-color: #36A2EB;
+    /* Change border color on focus */
     outline: none;
 }
 
 label {
     display: flex;
     align-items: center;
-    margin: 5px 0; /* Space between checkboxes */
-    font-size: 16px; /* Font size for labels */
+    margin: 5px 0;
+    /* Space between checkboxes */
+    font-size: 16px;
+    /* Font size for labels */
 }
 
 input[type="checkbox"] {
-    margin-right: 5px; /* Space between checkbox and label */
+    margin-right: 5px;
+    /* Space between checkbox and label */
 }
 
 @media (min-width: 600px) {
     .filter-group {
-        flex-direction: row; /* Change to row layout on larger screens */
-        gap: 20px; /* Increase space between elements */
+        flex-direction: row;
+        /* Change to row layout on larger screens */
+        gap: 20px;
+        /* Increase space between elements */
     }
 }
 
 .filters select {
-    margin-right: 10px; /* Space between year and service dropdowns */
+    margin-right: 10px;
+    /* Space between year and service dropdowns */
 }
 
 #genderSelect {
-    display: flex; /* Align gender checkboxes inline */
-    align-items: center; /* Center checkboxes vertically */
+    display: flex;
+    /* Align gender checkboxes inline */
+    align-items: center;
+    /* Center checkboxes vertically */
 }
 
 #genderSelect label {
-    margin-right: 10px; /* Space between labels */
+    margin-right: 10px;
+    /* Space between labels */
+}
+
+.services-text{
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
 }
 
 .chart-title {
-    color: #333; /* Text color */
-    text-align: center; /* Center the title text */
-    font-size: 32px; /* Set font size */
-    margin-bottom: 10px; /* Space below the title */
+    color: #333;
+    font-size: 24px;
+    /* Set font size */
+    margin-top: 10px;
+    margin-bottom: 20px;
+    /* Space below the title */
 }
 
 .chartjs-legend {
