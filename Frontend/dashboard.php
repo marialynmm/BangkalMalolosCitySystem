@@ -291,6 +291,7 @@
                     }]
                 },
                 options: {
+                    maintainAspectRatio: false,
                     responsive: true,
                     indexAxis: 'y', // Set this to 'y' for horizontal bars
                     scales: {

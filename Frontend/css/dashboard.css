@@ -376,6 +376,7 @@ input[type="checkbox"] {
 }
 
 .card:nth-child(5) {
+    grid-column: span 2;
     background-color: #ffffff;
     /* Red */
 }
