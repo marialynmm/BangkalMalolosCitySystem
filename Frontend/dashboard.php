@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php include "../Backend/connect.php"; ?>
+<?php session_start(); ?>
 
 <head>
     <meta charset="UTF-8">
@@ -87,6 +88,7 @@
         ?>
 
         <div class="content" id="content">
+
             <div class="main-content">
                 <section class="dashboard">
                     <!-- Population Cards -->
@@ -113,6 +115,100 @@
                                 <p><?php echo $female_count; ?></p>
                             </div>
                         </div>
+                    </div>
+
+                    <div style="color:#333;" class="card">
+                        <h3 class="chart-title">Add New Data</h3>
+
+                        <?php if (isset($_SESSION['success_message'])): ?>
+                            <div class="message" style="color: green;">
+                                <strong>
+                                    <?php
+                                    echo $_SESSION['success_message'];
+                                    unset($_SESSION['success_message']); // Clear the message after displaying it
+                                    ?>
+                                </strong>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (isset($_SESSION['error_message'])): ?>
+                            <div class="message" style="color: red;">
+                                <strong>
+                                    <?php
+                                    echo $_SESSION['error_message'];
+                                    unset($_SESSION['error_message']); // Clear the message after displaying it
+                                    ?>
+                                </strong>
+                            </div>
+                        <?php endif; ?>
+
+                        <form action="../Backend/add_data.php" method="POST" class="form-grid">
+                            <div class="form-group">
+                                <label for="no_of_population">No of Population:</label>
+                                <input type="number" id="no_of_population" name="no_of_population" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="no_of_household">No of Household:</label>
+                                <input type="number" id="no_of_household" name="no_of_household" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="no_of_families">No of Families:</label>
+                                <input type="number" id="no_of_families" name="no_of_families" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="purok_st_sitio_blk_lot">Purok/Street/Sitio/Block/Lot:</label>
+                                <input type="text" id="purok_st_sitio_blk_lot" name="purok_st_sitio_blk_lot" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name">Full Name:</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="birthday">Birthday:</label>
+                                <input type="date" id="birthday" name="birthday" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="age">Age:</label>
+                                <input type="number" id="age" name="age" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gender">Gender:</label>
+                                <select id="gender" name="gender" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="occupation">Occupation:</label>
+                                <input type="text" id="occupation" name="occupation" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="civil_status">Civil Status:</label>
+                                <select id="civil_status" name="civil_status" required>
+                                    <option value="single">Single</option>
+                                    <option value="married">Married</option>
+                                    <option value="widow">Widow</option>
+                                    <option value="divorced">Divorced</option>
+                                    <option value="live-in">Live-In</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="toilet_type">Toilet Type:</label>
+                                <input type="text" id="toilet_type" name="toilet_type" required>
+                            </div>
+
+                            <button type="submit" class="submit-button">Add Data</button>
+                        </form>
                     </div>
 
                     <div class="card">
@@ -146,6 +242,41 @@
         </div>
 
         <script>
+            //ADDING DATA
+            document.querySelector('.form-grid').addEventListener('submit', function(event) {
+                const fields = [
+                    'no_of_population',
+                    'no_of_household',
+                    'no_of_families',
+                    'purok_st_sitio_blk_lot',
+                    'name',
+                    'birthday',
+                    'age',
+                    'gender',
+                    'occupation',
+                    'civil_status',
+                    'toilet_type'
+                ];
+
+                let allFilled = true;
+
+                fields.forEach(field => {
+                    const input = document.getElementById(field);
+                    if (!input.value) {
+                        allFilled = false;
+                        input.style.borderColor = 'red'; // Highlight empty fields
+                    } else {
+                        input.style.borderColor = ''; // Reset border color
+                    }
+                });
+
+                if (!allFilled) {
+                    event.preventDefault(); // Prevent form submission
+                    alert('Please fill in all fields.');
+                }
+            });
+
+            //PIECHART
             const ctx = document.getElementById('populationChart').getContext('2d');
             const populationChart = new Chart(ctx, {
                 type: 'pie',

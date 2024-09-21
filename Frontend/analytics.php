@@ -98,7 +98,8 @@
                             <tbody>
                                 <?php
                                 // Fetch data from the table
-                                $sql = "SELECT * FROM Census_tb WHERE Name IS NOT NULL";
+                                $sql = "SELECT * FROM Census_tb WHERE Name IS NOT NULL AND Name != 'N/A'";
+
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
@@ -120,28 +121,6 @@
                     </div>
                 </div>
 
-            </div>
-        </div>
-
-        <!-- Vaccine Doses Modal -->
-        <div id="editModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h4>Edit Vaccine Doses Data</h4>
-                <div>
-                    <label for="vaccinated">Vaccinated:</label>
-                    <input type="number" id="vaccinated" value="300" min="0">
-                </div>
-                <div>
-                    <label for="notVaccinated">Not Vaccinated:</label>
-                    <input type="number" id="notVaccinated" value="50" min="0">
-                </div>
-                <div>
-                    <label for="boosterVaccinated">Booster Vaccinated:</label>
-                    <input type="number" id="boosterVaccinated" value="100" min="0">
-                </div>
-                <button id="updateChart">Update Chart</button>
-                <button id="cancelEdit">Cancel</button>
             </div>
         </div>
 
