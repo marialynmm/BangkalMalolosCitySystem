@@ -145,27 +145,27 @@
                         <form action="../Backend/add_data.php" method="POST" class="form-grid">
                             <div class="form-group">
                                 <label for="no_of_population">No of Population:</label>
-                                <input type="number" id="no_of_population" name="no_of_population" required>
+                                <input type="number" id="no_of_population" name="no_of_population" placeholder="No of Population" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="no_of_household">No of Household:</label>
-                                <input type="number" id="no_of_household" name="no_of_household" required>
+                                <input type="number" id="no_of_household" name="no_of_household" placeholder="No of Household" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="no_of_families">No of Families:</label>
-                                <input type="number" id="no_of_families" name="no_of_families" required>
+                                <input type="number" id="no_of_families" name="no_of_families" placeholder="No of Families" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="purok_st_sitio_blk_lot">Purok/Street/Sitio/Block/Lot:</label>
-                                <input type="text" id="purok_st_sitio_blk_lot" name="purok_st_sitio_blk_lot" required>
+                                <input type="text" id="purok_st_sitio_blk_lot" name="purok_st_sitio_blk_lot" placeholder="Purok/Street/Sitio/Block/Lot" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="name">Full Name:</label>
-                                <input type="text" id="name" name="name" required>
+                                <input type="text" id="name" name="name" placeholder="Full Name" required>
                             </div>
 
                             <div class="form-group">
@@ -175,7 +175,7 @@
 
                             <div class="form-group">
                                 <label for="age">Age:</label>
-                                <input type="number" id="age" name="age" required>
+                                <input type="number" id="age" name="age" placeholder="Age" required>
                             </div>
 
                             <div class="form-group">
@@ -188,7 +188,7 @@
 
                             <div class="form-group">
                                 <label for="occupation">Occupation:</label>
-                                <input type="text" id="occupation" name="occupation" required>
+                                <input type="text" id="occupation" name="occupation" placeholder="Occupation" required>
                             </div>
 
                             <div class="form-group">
@@ -204,7 +204,7 @@
 
                             <div class="form-group">
                                 <label for="toilet_type">Toilet Type:</label>
-                                <input type="text" id="toilet_type" name="toilet_type" required>
+                                <input type="text" id="toilet_type" name="toilet_type" placeholder="Toilet Type" required>
                             </div>
 
                             <button type="submit" class="submit-button">Add Data</button>

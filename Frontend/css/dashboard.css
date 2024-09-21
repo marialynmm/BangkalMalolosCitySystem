@@ -224,7 +224,7 @@ h1 {
 }
 
 #serviceSelect {
-    max-width: 200px;
+    max-width: 500px;
     /* Set a maximum width */
     width: 100%;
     /* Make it responsive */
