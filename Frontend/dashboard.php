@@ -362,73 +362,79 @@
             });
 
             // Update chart based on selected filters
-            // Update chart based on selected filters
             function updateChart() {
                 const selectedYear = document.getElementById('yearSelect').value;
                 const selectedService = document.getElementById('serviceSelect').value;
                 const maleChecked = document.querySelector('input[value="M"]').checked;
                 const femaleChecked = document.querySelector('input[value="F"]').checked;
 
-                // Fetch data from server
-                fetch('../Backend/get_population_services.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            year: selectedYear,
-                            service: selectedService
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        const dataCounts = data.counts;
-                        const maleCount = dataCounts.M ? parseInt(dataCounts.M, 10) : 0; // Parse as int, default to 0
-                        const femaleCount = dataCounts.F ? parseInt(dataCounts.F, 10) : 0; // Parse as int, default to 0
+                // Proceed only if both year and service are selected
+                if (selectedYear && selectedService) {
+                    // Fetch data from server
+                    fetch('../Backend/get_population_services.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                year: selectedYear,
+                                service: selectedService
+                            }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            const dataCounts = data.counts;
+                            const maleCount = dataCounts.M ? parseInt(dataCounts.M, 10) : 0; // Parse as int, default to 0
+                            const femaleCount = dataCounts.F ? parseInt(dataCounts.F, 10) : 0; // Parse as int, default to 0
 
-                        // Prepare chart data
-                        const chartData = [maleCount, femaleCount];
+                            // Prepare chart data
+                            const chartData = [maleCount, femaleCount];
 
-                        // Update chart data
-                        populationChart.data.datasets[0].data = chartData;
-                        populationChart.update();
+                            // Update chart data
+                            populationChart.data.datasets[0].data = chartData;
+                            populationChart.update();
 
-                        // Calculate total sum
-                        const totalSum = maleCount + femaleCount;
+                            // Calculate total sum
+                            const totalSum = maleCount + femaleCount;
 
-                        // Construct gender text based on selections and counts
-                        let genderText = '';
-                        if (maleCount === 0 && femaleCount === 0) {
-                            genderText = ''; // No individuals detected
-                        } else if (maleChecked && femaleChecked) {
-                            genderText = 'Male & Female'; // Both selected
-                        } else if (maleChecked) {
-                            genderText = 'Male'; // Only Male selected
-                        } else if (femaleChecked) {
-                            genderText = 'Female'; // Only Female selected
-                        }
+                            // Construct gender text based on selections and counts
+                            let genderText = '';
+                            if (maleCount === 0 && femaleCount === 0) {
+                                genderText = ''; // No individuals detected
+                            } else if (maleChecked && femaleChecked) {
+                                genderText = 'Male & Female'; // Both selected
+                            } else if (maleChecked) {
+                                genderText = 'Male'; // Only Male selected
+                            } else if (femaleChecked) {
+                                genderText = 'Female'; // Only Female selected
+                            }
 
-                        // Prepare summary text
-                        let summaryText = `The bar chart illustrates the number of individuals in need of services within the community. For the year <b>${selectedYear}</b> and the service <b>${selectedService}</b>, the total number of individuals is <b>${totalSum}</b>`;
+                            // Prepare summary text
+                            let summaryText = `The bar chart illustrates the number of individuals in need of services within the community. For the year <b>${selectedYear}</b> and the service <b>${selectedService}</b>, the total number of individuals is <b>${totalSum}</b>`;
 
-                        // Add gender breakdown only if applicable
-                        if (genderText) {
-                            summaryText += `, with the breakdown by gender <b>${genderText}</b>.`;
-                        }
+                            // Add gender breakdown only if applicable
+                            if (genderText) {
+                                summaryText += `, with the breakdown by gender <b>${genderText}</b>.`;
+                            }
 
-                        document.getElementById('servicesText').innerHTML = summaryText.trim();
+                            document.getElementById('servicesText').innerHTML = summaryText.trim();
 
-                        // Disable the female checkbox if the count is zero
-                        const femaleCheckbox = document.querySelector('input[value="F"]');
-                        femaleCheckbox.disabled = femaleCount === 0;
+                            // Disable the female checkbox if the count is zero
+                            const femaleCheckbox = document.querySelector('input[value="F"]');
+                            femaleCheckbox.disabled = femaleCount === 0;
 
-                        // Optionally, if female count is zero and checkbox is checked, uncheck it
-                        if (femaleCount === 0 && femaleChecked) {
-                            femaleCheckbox.checked = false;
-                        }
-                    });
+                            // Optionally, if female count is zero and checkbox is checked, uncheck it
+                            if (femaleCount === 0 && femaleChecked) {
+                                femaleCheckbox.checked = false;
+                            }
+                        });
+                } else {
+                    // Clear the chart and text if selections are not complete
+                    populationChart.data.datasets[0].data = [0, 0];
+                    populationChart.update();
+                    document.getElementById('servicesText').innerHTML = '';
+                }
             }
-
 
             // Event listeners
             document.getElementById('yearSelect').addEventListener('change', updateChart);
