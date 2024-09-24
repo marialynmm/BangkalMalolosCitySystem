@@ -41,31 +41,113 @@
     </div>
     <div class="container">
         <!-- Sidebar -->
-        <?php include 'includes/sidebar.php'; ?>
+        <?php include 'includes/sidebar.php';
+        include "../Backend/connect.php";
+
+        // Get unique services
+        $services = [];
+        $service_names = [];
+        $result = $conn->query("SELECT Community_Services FROM v1_male_female UNION SELECT Community_Services FROM v2_male UNION SELECT Community_Services FROM v3_female");
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $service_name = $row['Community_Services'];
+                if (!empty($service_name) && !in_array($service_name, $service_names)) {
+                    $services[] = ['name' => $service_name];
+                    $service_names[] = $service_name;
+                }
+            }
+        }
+
+        // Get years from column names
+        $years = [];
+        $tables = ['v1_male_female', 'v2_male', 'v3_female'];
+
+        foreach ($tables as $table) {
+            $result = $conn->query("SHOW COLUMNS FROM $table");
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    // Check if the column name matches a year format (4 digits)
+                    if (preg_match('/^\d{4}$/', $row['Field'])) {
+                        $years[] = $row['Field'];
+                    }
+                }
+            } else {
+                // Debug: Check for errors in the query
+                echo "Error: " . $conn->error;
+            }
+        }
+
+        // Remove duplicates and keep unique years
+        $years = array_unique($years);
+
+        $conn->close();
+        ?>
         <div id="tooltip" class="tooltip" style="display: none;">Drag to move</div>
 
         <!-- Content -->
         <div class="content" id="content">
             <!-- <h1>Barangay Bangkal</h1> -->
             <div class="dashboard">
+
                 <!-- Bar Chart Card -->
                 <div class="card" id="barChartCard">
+                    <button class="move-btn" title="Move Card">
+                        <img src="images/move_ic.png" alt="Move Icon" />
+                    </button>
                     <div class="card-header">
                         <h3>Age Group</h3>
-                        <button id="editBarChart" class="edit-button">Edit</button>
                     </div>
                     <canvas id="barChart"></canvas>
                 </div>
+
+                <!-- Horizontal Bar Chart Card -->
+                <div class="card" id="servicesBarChartCard">
+                    <button class="move-btn" title="Move Card">
+                        <img src="images/move_ic.png" alt="Move Icon" />
+                    </button>
+                    <div class="card-header">
+                        <h3>Community Services Demand</h3>
+                    </div>
+                    <div class="filters">
+                        <div class="filter-group">
+                            <select id="yearSelect">
+                                <option value="">Select Year</option>
+                                <?php foreach ($years as $year): ?>
+                                    <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <select id="serviceSelect">
+                                <option value="">Select Service</option>
+                                <?php foreach ($services as $service): ?>
+                                    <option value="<?php echo $service['name']; ?>"><?php echo $service['name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <div style="display:none;" id="genderSelect">
+                                <label><input type="checkbox" value="M"> Male</label>
+                                <label><input type="checkbox" value="F"> Female</label>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="populationChart" width="150" height="250"></canvas>
+                    <p id="servicesText" class="services-text"></p>
+                </div>
+
                 <!-- Line Chart Card -->
                 <div class="card" id="lineChartCard">
+                    <button class="move-btn" title="Move Card">
+                        <img src="images/move_ic.png" alt="Move Icon" />
+                    </button>
                     <div class="card-header">
-                        <h3>Predict Community Services</h3>
-                        <button id="editBarChart" class="edit-button">Edit</button>
+                        <h3>Population Growth</h3>
                     </div>
                     <canvas id="lineChart"></canvas>
                 </div>
+
                 <!-- Table Data Card -->
                 <div class="card" id="dataTableCard">
+                    <button class="move-btn" title="Move Card">
+                        <img src="images/move_ic.png" alt="Move Icon" />
+                    </button>
                     <div class="card-header">
                         <h3>Data Table</h3>
                         <div class="table-controls">

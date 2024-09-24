@@ -1,14 +1,66 @@
+// Initialize charts and event listeners after DOM content is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeInteract(); // Then initialize interactions
+    initializeCharts(); // Finally, initialize charts
+    initializeSidebar();
+    restoreLayout();
+
+    const serviceSelect = document.getElementById('serviceSelect');
+    serviceSelect.addEventListener('change', updateChart);
+});
+
 function navigate(url) {
     window.location.href = url;
 }
 
-// DRAG
+function initializeCardLocking() {
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        const lockBtn = card.querySelector('.move-btn');
+
+        // Initialize lock state for each card
+        cardLockStates[card.id] = true; // All cards start locked
+
+        // Add event listener to the lock button
+        lockBtn.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent click events from bubbling
+            cardLockStates[card.id] = !cardLockStates[card.id]; // Toggle lock state
+            updateCardLockState(card);
+        });
+
+        // Lock the card initially
+        updateCardLockState(card);
+    });
+}
+
+function updateCardLockState(card) {
+    const isLocked = cardLockStates[card.id];
+    const lockBtn = card.querySelector('.move-btn');
+
+    if (isLocked) {
+        lockBtn.innerHTML = 'Move'; // Lock icon
+        card.classList.add('locked');
+        card.style.pointerEvents = 'none'; // Disable interactions on the card
+        card.style.opacity = '1'; // Visually indicate locked state
+    } else {
+        lockBtn.innerHTML = 'Move'; // Unlock icon
+        card.classList.remove('locked');
+        card.style.pointerEvents = 'auto'; // Enable interactions on the card
+        card.style.opacity = '0'; // Reset opacity when unlocked
+
+        // Initialize draggable only when unlocked
+        initializeDraggable(lockBtn, card);
+    }
+}
+
 
 // Initialize Interact.js for draggable and resizable cards with snapping
 const defaultLayout = [
-    { "id": "barChartCard", "x": 0, "y": 0, "width": 438, "height": 521 },
-    { "id": "lineChartCard", "x": 450, "y": 0, "width": 1325, "height": 520 },
-    { "id": "dataTableCard", "x": -230, "y": 550, "width": 1781, "height": 520 }
+    { "id": "barChartCard", "x": 52, "y": 0, "width": 545, "height": 608 },
+    { "id": "servicesBarChartCard", "x": 500, "y": 0, "width": 1215, "height": 607 },
+    { "id": "lineChartCard", "x": -234, "y": 626, "width": 1777, "height": 520 },
+    { "id": "dataTableCard", "x": -687, "y": 1163, "width": 1777, "height": 561 }
 ];
 
 function applyDefaultLayout() {
@@ -78,28 +130,31 @@ function initializeInteract() {
         }
     }
 
-    interact('.card')
+    interact('.move-btn')
         .draggable({
             listeners: {
                 start(event) {
                     showGrid();
-                    event.target.style.zIndex = 1000;
+                    const card = event.target.closest('.card');
+                    card.style.zIndex = 1000; // Increase z-index of the card
                 },
                 move(event) {
-                    const target = event.target;
-                    let x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-                    let y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+                    const button = event.target;
+                    const card = button.closest('.card'); // Get the card element
+                    let x = (parseFloat(card.getAttribute('data-x')) || 0) + event.dx;
+                    let y = (parseFloat(card.getAttribute('data-y')) || 0) + event.dy;
 
                     x = Math.round(x / 25) * 25;
                     y = Math.round(y / 25) * 25;
 
-                    target.style.transform = `translate(${x}px, ${y}px)`;
-                    target.setAttribute('data-x', x);
-                    target.setAttribute('data-y', y);
+                    card.style.transform = `translate(${x}px, ${y}px)`;
+                    card.setAttribute('data-x', x);
+                    card.setAttribute('data-y', y);
                 },
                 end(event) {
+                    const card = event.target.closest('.card');
                     hideGrid();
-                    event.target.style.zIndex = '';
+                    card.style.zIndex = ''; // Reset z-index
                     adjustCardPositions();
                     saveLayout();
                 }
@@ -108,13 +163,15 @@ function initializeInteract() {
                 interact.modifiers.snap({
                     targets: [interact.snappers.grid({ x: 25, y: 25 })],
                     range: Infinity,
-                    relativePoints: [{ x: 1, y: 1 }]
+                    relativePoints: [{ x: 0, y: 0 }]
                 }),
                 interact.modifiers.restrictEdges({
                     outer: boundary
                 })
             ]
-        })
+        });
+
+    interact('.card')
         .resizable({
             edges: { left: true, right: true, bottom: true, top: true },
             listeners: {
@@ -177,11 +234,6 @@ function initializeInteract() {
     applyDefaultLayout();
 }
 
-// Ensure interact is initialized after the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-    initializeInteract();
-});
-
 // Example of changing boundaries dynamically
 function updateBoundary(newBoundary) {
     boundary = newBoundary;
@@ -195,6 +247,7 @@ updateBoundary({ top: 0, left: 0, right: 800, bottom: 600 });
 
 let barChart;
 let lineChart;
+let servicesBarChart;
 
 function initializeCharts() {
     // Destroy existing charts if they exist
@@ -203,6 +256,9 @@ function initializeCharts() {
     }
     if (lineChart && lineChart.destroy) {
         lineChart.destroy();
+    }
+    if (servicesBarChart && servicesBarChart.destroy) {
+        servicesBarChart.destroy();
     }
 
     // Initialize Bar Chart
@@ -263,28 +319,176 @@ function initializeCharts() {
             maintainAspectRatio: false
         }
     });
+
+    // Initialize Horizontal Bar Chart
+    const ctx = document.getElementById('populationChart').getContext('2d');
+    populationChart = new Chart(ctx, {
+        type: 'bar', // or 'horizontalBar', depending on your requirement
+        data: {
+            labels: ['Male', 'Female', 'Both'],
+            datasets: [{
+                label: 'Population by Gender',
+                data: [0, 0, 0], // Initial values
+                backgroundColor: ['#36A2EB', '#FF6384', '#4CAF50'],
+                borderColor: '#fff',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            indexAxis: 'y',
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Gender'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Population'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (tooltipItem) => {
+                            return `${tooltipItem.label}: ${tooltipItem.raw}`;
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
-// TABLE
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('searchInput');
-    const table = document.getElementById('dataTable');
-    const tbody = table.querySelector('tbody');
+// General update function for charts
+function updateChart() {
+    const selectedYear = document.getElementById('yearSelect').value;
+    const selectedService = document.getElementById('serviceSelect').value;
 
-    searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase();
-        const rows = Array.from(tbody.querySelectorAll('tr'));
+    // Only fetch data if both selections are made
+    if (selectedYear && selectedService) {
+        fetch('../Backend/get_population_services.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                year: selectedYear,
+                service: selectedService
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                const maleCount = parseInt(data.counts.M, 10) || 0;
+                const femaleCount = parseInt(data.counts.F, 10) || 0;
+                const bothCount = parseInt(data.counts.MF, 10) || 0;
 
-        rows.forEach(row => {
-            const cells = Array.from(row.querySelectorAll('td'));
-            const nameCell = cells[4]; // Assuming 'NAME' is the 5th column (index 4)
-            const match = nameCell && nameCell.textContent.toLowerCase().includes(searchTerm);
+                // Prepare chart data
+                populationChart.data.datasets[0].data = [maleCount, femaleCount, bothCount];
+                populationChart.update();
 
-            row.style.display = match ? '' : 'none';
-        });
+                // Prepare summary text
+                const totalSum = maleCount + femaleCount + bothCount;
+                let genderText = '';
+
+                if (bothCount > 0) {
+                    genderText = 'Both Male & Female';
+                } else if (maleCount && femaleCount) {
+                    genderText = 'Male & Female';
+                } else if (maleCount) {
+                    genderText = 'Male';
+                } else if (femaleCount) {
+                    genderText = 'Female';
+                }
+
+                let summaryText = `For the year <b>${selectedYear}</b> and the service <b>${selectedService}</b>, the total number of individuals is <b>${totalSum}</b>`;
+                if (genderText) {
+                    summaryText += `, with the breakdown by gender <b>${genderText}</b>.`;
+                }
+
+                document.getElementById('servicesText').innerHTML = summaryText.trim();
+            });
+    } else {
+        // Clear chart and text if selections are not complete
+        populationChart.data.datasets[0].data = [0, 0, 0];
+        populationChart.update();
+        document.getElementById('servicesText').innerHTML = '';
+    }
+}
+
+document.querySelector('.form-grid').addEventListener('submit', function (event) {
+    const fields = [
+        'no_of_population',
+        'no_of_household',
+        'no_of_families',
+        'purok_st_sitio_blk_lot',
+        'name',
+        'birthday',
+        'age',
+        'gender',
+        'occupation',
+        'civil_status',
+        'toilet_type'
+    ];
+
+    let allFilled = true;
+
+    fields.forEach(field => {
+        const input = document.getElementById(field);
+        if (!input.value) {
+            allFilled = false;
+            input.style.borderColor = 'red'; // Highlight empty fields
+        } else {
+            input.style.borderColor = ''; // Reset border color
+        }
     });
+
+    if (!allFilled) {
+        event.preventDefault(); // Prevent form submission
+        alert('Please fill in all fields.');
+    }
 });
 
+document.getElementById('serviceSelect').disabled = true;
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    checkbox.disabled = true;
+});
+
+// Enable service and gender options based on year selection
+document.getElementById('yearSelect').addEventListener('change', function () {
+    const isYearSelected = this.value !== '';
+    document.getElementById('serviceSelect').disabled = !isYearSelected;
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.disabled = !isYearSelected;
+    });
+
+    // Reset selections and update chart
+    if (!isYearSelected) {
+        document.getElementById('serviceSelect').value = '';
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+    }
+    updateChart(); // Call updateChart to reflect changes
+});
+
+// Event listeners
+document.getElementById('yearSelect').addEventListener('change', updateChart);
+document.getElementById('serviceSelect').addEventListener('change', updateChart);
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', updateChart);
+});
+
+
+// Sidebar initialization
 function initializeSidebar() {
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('toggleBtn');
@@ -329,6 +533,7 @@ function saveLayout() {
         });
     });
 
+    console.log('Saving layout:', layoutData);
     localStorage.setItem('cardLayout', JSON.stringify(layoutData));
 }
 
@@ -349,11 +554,22 @@ function restoreLayout() {
     }
 }
 
-
-// Combine initialization functions into a single DOMContentLoaded event
+// TABLE
 document.addEventListener('DOMContentLoaded', () => {
-    initializeInteract();
-    initializeCharts(); // Initialize charts without pieChart
-    initializeSidebar();
-    restoreLayout();
+    const searchInput = document.getElementById('searchInput');
+    const table = document.getElementById('dataTable');
+    const tbody = table.querySelector('tbody');
+
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.forEach(row => {
+            const cells = Array.from(row.querySelectorAll('td'));
+            const nameCell = cells[4]; // Assuming 'NAME' is the 5th column (index 4)
+            const match = nameCell && nameCell.textContent.toLowerCase().includes(searchTerm);
+
+            row.style.display = match ? '' : 'none';
+        });
+    });
 });

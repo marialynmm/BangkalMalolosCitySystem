@@ -58,42 +58,6 @@
         $result_female = $conn->query($sql_female);
         $female_count = $result_female->fetch_assoc()['total_female'] ?? 0;
 
-        // Get unique services
-        $services = [];
-        $service_names = [];
-        $result = $conn->query("SELECT Community_Services FROM v1_male_female UNION SELECT Community_Services FROM v2_male UNION SELECT Community_Services FROM v3_female");
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $service_name = $row['Community_Services'];
-                if (!empty($service_name) && !in_array($service_name, $service_names)) {
-                    $services[] = ['name' => $service_name];
-                    $service_names[] = $service_name;
-                }
-            }
-        }
-
-        // Get years from column names
-        $years = [];
-        $tables = ['v1_male_female', 'v2_male', 'v3_female'];
-
-        foreach ($tables as $table) {
-            $result = $conn->query("SHOW COLUMNS FROM $table");
-            if ($result) {
-                while ($row = $result->fetch_assoc()) {
-                    // Check if the column name matches a year format (4 digits)
-                    if (preg_match('/^\d{4}$/', $row['Field'])) {
-                        $years[] = $row['Field'];
-                    }
-                }
-            } else {
-                // Debug: Check for errors in the query
-                echo "Error: " . $conn->error;
-            }
-        }
-
-        // Remove duplicates and keep unique years
-        $years = array_unique($years);
-
         // Close the connection
         $conn->close();
         ?>
@@ -222,31 +186,192 @@
                         </form>
                     </div>
 
-                    <div class="card">
-                        <h3 class="chart-title">Community Service Demand</h3>
-                        <div class="filters">
-                            <div class="filter-group">
-                                <select id="yearSelect">
-                                    <option value="">Select Year</option>
-                                    <?php foreach ($years as $year): ?>
-                                        <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <select id="serviceSelect">
-                                    <option value="">Select Service</option>
-                                    <?php foreach ($services as $service): ?>
-                                        <option value="<?php echo $service['name']; ?>"><?php echo $service['name']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <div style="display:none;" id="genderSelect">
-                                    <label><input type="checkbox" value="M"> Male</label>
-                                    <label><input type="checkbox" value="F"> Female</label>
-                                </div>
-                            </div>
-                        </div>
-                        <canvas id="populationChart" width="350" height="350"></canvas>
-                        <p id="servicesText" class="services-text"></p>
+                    <div style="color:#333;" class="card">
+                        <h3 class="chart-title">Update Data</h3>
 
+                        <?php if (isset($_SESSION['success_message'])): ?>
+                            <div class="message" style="color: green;">
+                                <strong>
+                                    <?php
+                                    echo $_SESSION['success_message'];
+                                    unset($_SESSION['success_message']); // Clear the message after displaying it
+                                    ?>
+                                </strong>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (isset($_SESSION['error_message'])): ?>
+                            <div class="message" style="color: red;">
+                                <strong>
+                                    <?php
+                                    echo $_SESSION['error_message'];
+                                    unset($_SESSION['error_message']); // Clear the message after displaying it
+                                    ?>
+                                </strong>
+                            </div>
+                        <?php endif; ?>
+
+                        <form action="../Backend/add_data.php" method="POST" class="form-grid">
+                            <div class="form-group">
+                                <label for="no_of_population">No of Population:</label>
+                                <input type="number" id="no_of_population" name="no_of_population" placeholder="No of Population" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="no_of_household">No of Household:</label>
+                                <input type="number" id="no_of_household" name="no_of_household" placeholder="No of Household" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="no_of_families">No of Families:</label>
+                                <input type="number" id="no_of_families" name="no_of_families" placeholder="No of Families" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="purok_st_sitio_blk_lot">Purok/Street/Sitio/Block/Lot:</label>
+                                <input type="text" id="purok_st_sitio_blk_lot" name="purok_st_sitio_blk_lot" placeholder="Purok/Street/Sitio/Block/Lot" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name">Full Name:</label>
+                                <input type="text" id="name" name="name" placeholder="Full Name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="birthday">Birthday:</label>
+                                <input type="date" id="birthday" name="birthday" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="age">Age:</label>
+                                <input type="number" id="age" name="age" placeholder="Age" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gender">Gender:</label>
+                                <select id="gender" name="gender" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="occupation">Occupation:</label>
+                                <input type="text" id="occupation" name="occupation" placeholder="Occupation" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="civil_status">Civil Status:</label>
+                                <select id="civil_status" name="civil_status" required>
+                                    <option value="single">Single</option>
+                                    <option value="married">Married</option>
+                                    <option value="widow">Widow</option>
+                                    <option value="divorced">Divorced</option>
+                                    <option value="live-in">Live-In</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="toilet_type">Toilet Type:</label>
+                                <input type="text" id="toilet_type" name="toilet_type" placeholder="Toilet Type" required>
+                            </div>
+
+                            <button type="submit" class="submit-button">Add Data</button>
+                        </form>
+                    </div>
+
+                    <div style="color:#333;" class="card">
+                        <h3 class="chart-title">Delete Data</h3>
+
+                        <?php if (isset($_SESSION['success_message'])): ?>
+                            <div class="message" style="color: green;">
+                                <strong>
+                                    <?php
+                                    echo $_SESSION['success_message'];
+                                    unset($_SESSION['success_message']); // Clear the message after displaying it
+                                    ?>
+                                </strong>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (isset($_SESSION['error_message'])): ?>
+                            <div class="message" style="color: red;">
+                                <strong>
+                                    <?php
+                                    echo $_SESSION['error_message'];
+                                    unset($_SESSION['error_message']); // Clear the message after displaying it
+                                    ?>
+                                </strong>
+                            </div>
+                        <?php endif; ?>
+
+                        <form action="../Backend/add_data.php" method="POST" class="form-grid">
+                            <div class="form-group">
+                                <label for="no_of_population">No of Population:</label>
+                                <input type="number" id="no_of_population" name="no_of_population" placeholder="No of Population" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="no_of_household">No of Household:</label>
+                                <input type="number" id="no_of_household" name="no_of_household" placeholder="No of Household" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="no_of_families">No of Families:</label>
+                                <input type="number" id="no_of_families" name="no_of_families" placeholder="No of Families" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="purok_st_sitio_blk_lot">Purok/Street/Sitio/Block/Lot:</label>
+                                <input type="text" id="purok_st_sitio_blk_lot" name="purok_st_sitio_blk_lot" placeholder="Purok/Street/Sitio/Block/Lot" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name">Full Name:</label>
+                                <input type="text" id="name" name="name" placeholder="Full Name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="birthday">Birthday:</label>
+                                <input type="date" id="birthday" name="birthday" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="age">Age:</label>
+                                <input type="number" id="age" name="age" placeholder="Age" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gender">Gender:</label>
+                                <select id="gender" name="gender" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="occupation">Occupation:</label>
+                                <input type="text" id="occupation" name="occupation" placeholder="Occupation" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="civil_status">Civil Status:</label>
+                                <select id="civil_status" name="civil_status" required>
+                                    <option value="single">Single</option>
+                                    <option value="married">Married</option>
+                                    <option value="widow">Widow</option>
+                                    <option value="divorced">Divorced</option>
+                                    <option value="live-in">Live-In</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="toilet_type">Toilet Type:</label>
+                                <input type="text" id="toilet_type" name="toilet_type" placeholder="Toilet Type" required>
+                            </div>
+
+                            <button type="submit" class="submit-button">Add Data</button>
+                        </form>
                     </div>
                 </section>
             </div>
@@ -287,155 +412,6 @@
                 }
             });
 
-            //PIECHART
-            const ctx = document.getElementById('populationChart').getContext('2d');
-            const populationChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Male', 'Female', 'Both'], // Add 'Both' label for MF
-                    datasets: [{
-                        label: 'Population by Gender',
-                        data: [0, 0, 0], // Initialize with zeros
-                        backgroundColor: ['#36A2EB', '#FF6384', '#4CAF50'], // Different color for MF
-                        borderColor: '#fff',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    responsive: true,
-                    indexAxis: 'y', // Set this to 'y' for horizontal bars
-                    scales: {
-                        x: {
-                            beginAtZero: true, // Start x-axis at zero
-                            title: {
-                                display: true,
-                                text: 'Population'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Gender'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: (tooltipItem) => {
-                                    return `${tooltipItem.label}: ${tooltipItem.raw}`;
-                                }
-                            }
-                        },
-                        datalabels: {
-                            color: '#fff',
-                            anchor: 'end',
-                            align: 'end',
-                            formatter: (value, context) => {
-                                return value > 0 ? value : ''; // Only show label if greater than zero
-                            },
-                            font: {
-                                size: 14,
-                                weight: 'bold',
-                                family: 'Poppins, sans-serif'
-                            }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            document.getElementById('serviceSelect').disabled = true;
-            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                checkbox.disabled = true;
-            });
-
-            // Enable service and gender options based on year selection
-            document.getElementById('yearSelect').addEventListener('change', function() {
-                const isYearSelected = this.value !== '';
-                document.getElementById('serviceSelect').disabled = !isYearSelected;
-                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                    checkbox.disabled = !isYearSelected;
-                });
-
-                // Reset selections
-                if (!isYearSelected) {
-                    document.getElementById('serviceSelect').value = '';
-                    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                        checkbox.checked = false;
-                    });
-                    updateChart(); // Clear chart when year is deselected
-                }
-            });
-
-            // Update chart based on selected filters
-            function updateChart() {
-                const selectedYear = document.getElementById('yearSelect').value;
-                const selectedService = document.getElementById('serviceSelect').value;
-
-                if (selectedYear && selectedService) {
-                    fetch('../Backend/get_population_services.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                year: selectedYear,
-                                service: selectedService
-                            }),
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            const maleCount = parseInt(data.counts.M, 10) || 0;
-                            const femaleCount = parseInt(data.counts.F, 10) || 0;
-                            const bothCount = parseInt(data.counts.MF, 10) || 0;
-
-                            // Prepare chart data
-                            populationChart.data.datasets[0].data = [maleCount, femaleCount, bothCount];
-                            populationChart.update();
-
-                            // Calculate total sum
-                            const totalSum = maleCount + femaleCount + bothCount;
-                            let genderText = '';
-
-                            // Determine the gender text
-                            if (bothCount > 0) {
-                                genderText = 'Both Male & Female'; // Specific case for both genders
-                            } else if (maleCount && femaleCount) {
-                                genderText = 'Male & Female'; // Both selected
-                            } else if (maleCount) {
-                                genderText = 'Male'; // Only Male selected
-                            } else if (femaleCount) {
-                                genderText = 'Female'; // Only Female selected
-                            }
-
-                            // Prepare summary text
-                            let summaryText = `For the year <b>${selectedYear}</b> and the service <b>${selectedService}</b>, the total number of individuals is <b>${totalSum}</b>`;
-                            if (genderText) {
-                                summaryText += `, with the breakdown by gender <b>${genderText}</b>.`;
-                            }
-
-                            document.getElementById('servicesText').innerHTML = summaryText.trim();
-                        });
-                } else {
-                    // Clear chart and text if selections are not complete
-                    populationChart.data.datasets[0].data = [0, 0, 0];
-                    populationChart.update();
-                    document.getElementById('servicesText').innerHTML = '';
-                }
-            }
-
-
-            // Event listeners
-            document.getElementById('yearSelect').addEventListener('change', updateChart);
-            document.getElementById('serviceSelect').addEventListener('change', updateChart);
-            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                checkbox.addEventListener('change', updateChart);
-            });
         </script>
     </div>
 </body>

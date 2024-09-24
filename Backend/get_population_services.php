@@ -13,10 +13,6 @@ function getPopulationCount($year, $service, $gender)
 {
     global $conn;
 
-    if (!in_array($year, ['2019', '2020', '2021', '2022', '2023', '2024'])) {
-        return 0;
-    }
-
     // Prepare SQL query
     $sql = "SELECT SUM(`$year`) AS total 
             FROM ";
