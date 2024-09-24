@@ -8,60 +8,42 @@ $year = $data['year'] ?? null;
 $service = $data['service'] ?? null;
 
 // Function to get population count by filters
+// Fetch population counts based on year and service
 function getPopulationCount($year, $service, $gender)
 {
     global $conn;
 
-    // Ensure the year column is valid
-    $result = $conn->query("SHOW COLUMNS FROM datawithservices");
-    $validYears = [];
-    while ($row = $result->fetch_assoc()) {
-        if (preg_match('/^\d{4}$/', $row['Field'])) { // Check if the field name is a 4-digit year
-            $validYears[] = $row['Field'];
-        }
-    }
-
-    // Now use $validYears for the in_array check
-    if (!in_array($year, $validYears)) {
-        return 0; // Return 0 for invalid years
-    }
-
-    // Prepare SQL query to sum the selected year for the specific service and gender
-    $sql = "SELECT SUM(`$year`) AS total 
-            FROM datawithservices 
-            WHERE Gender = ?";
-
-    // Add condition for the selected service if provided
-    if ($service) {
-        $sql .= " AND Community_Services = ?";
-    }
-
-    // Prepare the statement
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        // Error preparing the statement
+    if (!in_array($year, ['2019', '2020', '2021', '2022', '2023', '2024'])) {
         return 0;
     }
 
-    // Bind parameters based on whether service is provided
-    if ($service) {
-        $stmt->bind_param("ss", $gender, $service);
+    // Prepare SQL query
+    $sql = "SELECT SUM(`$year`) AS total 
+            FROM ";
+
+    // Determine which table to query based on gender
+    if ($gender === 'MF') {
+        $sql .= "v1_male_female WHERE Community_Services = ?";
+    } elseif ($gender === 'M') {
+        $sql .= "v2_male WHERE Community_Services = ?";
     } else {
-        $stmt->bind_param("s", $gender);
+        $sql .= "v3_female WHERE Community_Services = ?";
     }
 
-    // Execute the query
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $service);
     $stmt->execute();
     $stmt->bind_result($total);
     $stmt->fetch();
     $stmt->close();
 
-    return $total ?: 0; // Return 0 if no total found
+    return $total ?: 0;
 }
 
-// Calculate counts for Male and Female
-$male_count = getPopulationCount($year, $service, 'M');
-$female_count = getPopulationCount($year, $service, 'F');
+// Get counts for each gender
+$male_count = (int) getPopulationCount($year, $service, 'M'); // Ensure it's an integer
+$female_count = (int) getPopulationCount($year, $service, 'F'); // Ensure it's an integer
+$both_count = (int) getPopulationCount($year, $service, 'MF'); // Ensure it's an integer
 
 // Return the counts as JSON
-echo json_encode(['counts' => ['M' => $male_count, 'F' => $female_count]]);
+echo json_encode(['counts' => ['M' => $male_count, 'F' => $female_count, 'MF' => $both_count]]);

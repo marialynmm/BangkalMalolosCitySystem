@@ -59,7 +59,7 @@
                 <!-- Line Chart Card -->
                 <div class="card" id="lineChartCard">
                     <div class="card-header">
-                        <h3>Population Growth</h3>
+                        <h3>Predict Community Services</h3>
                         <button id="editBarChart" class="edit-button">Edit</button>
                     </div>
                     <canvas id="lineChart"></canvas>

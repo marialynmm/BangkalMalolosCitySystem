@@ -61,7 +61,7 @@
         // Get unique services
         $services = [];
         $service_names = [];
-        $result = $conn->query("SELECT Community_Services FROM datawithservices");
+        $result = $conn->query("SELECT Community_Services FROM v1_male_female UNION SELECT Community_Services FROM v2_male UNION SELECT Community_Services FROM v3_female");
         if ($result) {
             while ($row = $result->fetch_assoc()) {
                 $service_name = $row['Community_Services'];
@@ -74,14 +74,25 @@
 
         // Get years from column names
         $years = [];
-        $result = $conn->query("SHOW COLUMNS FROM datawithservices");
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                if (preg_match('/^\d{4}$/', $row['Field'])) {
-                    $years[] = $row['Field'];
+        $tables = ['v1_male_female', 'v2_male', 'v3_female'];
+
+        foreach ($tables as $table) {
+            $result = $conn->query("SHOW COLUMNS FROM $table");
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    // Check if the column name matches a year format (4 digits)
+                    if (preg_match('/^\d{4}$/', $row['Field'])) {
+                        $years[] = $row['Field'];
+                    }
                 }
+            } else {
+                // Debug: Check for errors in the query
+                echo "Error: " . $conn->error;
             }
         }
+
+        // Remove duplicates and keep unique years
+        $years = array_unique($years);
 
         // Close the connection
         $conn->close();
@@ -227,7 +238,7 @@
                                         <option value="<?php echo $service['name']; ?>"><?php echo $service['name']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                                <div id="genderSelect">
+                                <div style="display:none;" id="genderSelect">
                                     <label><input type="checkbox" value="M"> Male</label>
                                     <label><input type="checkbox" value="F"> Female</label>
                                 </div>
@@ -279,13 +290,13 @@
             //PIECHART
             const ctx = document.getElementById('populationChart').getContext('2d');
             const populationChart = new Chart(ctx, {
-                type: 'bar', // Use 'bar' for a horizontal chart
+                type: 'bar',
                 data: {
-                    labels: ['Male', 'Female'], // Always show both labels
+                    labels: ['Male', 'Female', 'Both'], // Add 'Both' label for MF
                     datasets: [{
                         label: 'Population by Gender',
-                        data: [0, 0], // Initialize with zeros
-                        backgroundColor: ['#36A2EB', '#FF6384'],
+                        data: [0, 0, 0], // Initialize with zeros
+                        backgroundColor: ['#36A2EB', '#FF6384', '#4CAF50'], // Different color for MF
                         borderColor: '#fff',
                         borderWidth: 1
                     }]
@@ -365,12 +376,8 @@
             function updateChart() {
                 const selectedYear = document.getElementById('yearSelect').value;
                 const selectedService = document.getElementById('serviceSelect').value;
-                const maleChecked = document.querySelector('input[value="M"]').checked;
-                const femaleChecked = document.querySelector('input[value="F"]').checked;
 
-                // Proceed only if both year and service are selected
                 if (selectedYear && selectedService) {
-                    // Fetch data from server
                     fetch('../Backend/get_population_services.php', {
                             method: 'POST',
                             headers: {
@@ -383,58 +390,45 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            const dataCounts = data.counts;
-                            const maleCount = dataCounts.M ? parseInt(dataCounts.M, 10) : 0; // Parse as int, default to 0
-                            const femaleCount = dataCounts.F ? parseInt(dataCounts.F, 10) : 0; // Parse as int, default to 0
+                            const maleCount = parseInt(data.counts.M, 10) || 0;
+                            const femaleCount = parseInt(data.counts.F, 10) || 0;
+                            const bothCount = parseInt(data.counts.MF, 10) || 0;
 
                             // Prepare chart data
-                            const chartData = [maleCount, femaleCount];
-
-                            // Update chart data
-                            populationChart.data.datasets[0].data = chartData;
+                            populationChart.data.datasets[0].data = [maleCount, femaleCount, bothCount];
                             populationChart.update();
 
                             // Calculate total sum
-                            const totalSum = maleCount + femaleCount;
-
-                            // Construct gender text based on selections and counts
+                            const totalSum = maleCount + femaleCount + bothCount;
                             let genderText = '';
-                            if (maleCount === 0 && femaleCount === 0) {
-                                genderText = ''; // No individuals detected
-                            } else if (maleChecked && femaleChecked) {
+
+                            // Determine the gender text
+                            if (bothCount > 0) {
+                                genderText = 'Both Male & Female'; // Specific case for both genders
+                            } else if (maleCount && femaleCount) {
                                 genderText = 'Male & Female'; // Both selected
-                            } else if (maleChecked) {
+                            } else if (maleCount) {
                                 genderText = 'Male'; // Only Male selected
-                            } else if (femaleChecked) {
+                            } else if (femaleCount) {
                                 genderText = 'Female'; // Only Female selected
                             }
 
                             // Prepare summary text
-                            let summaryText = `The bar chart illustrates the number of individuals in need of services within the community. For the year <b>${selectedYear}</b> and the service <b>${selectedService}</b>, the total number of individuals is <b>${totalSum}</b>`;
-
-                            // Add gender breakdown only if applicable
+                            let summaryText = `For the year <b>${selectedYear}</b> and the service <b>${selectedService}</b>, the total number of individuals is <b>${totalSum}</b>`;
                             if (genderText) {
                                 summaryText += `, with the breakdown by gender <b>${genderText}</b>.`;
                             }
 
                             document.getElementById('servicesText').innerHTML = summaryText.trim();
-
-                            // Disable the female checkbox if the count is zero
-                            const femaleCheckbox = document.querySelector('input[value="F"]');
-                            femaleCheckbox.disabled = femaleCount === 0;
-
-                            // Optionally, if female count is zero and checkbox is checked, uncheck it
-                            if (femaleCount === 0 && femaleChecked) {
-                                femaleCheckbox.checked = false;
-                            }
                         });
                 } else {
-                    // Clear the chart and text if selections are not complete
-                    populationChart.data.datasets[0].data = [0, 0];
+                    // Clear chart and text if selections are not complete
+                    populationChart.data.datasets[0].data = [0, 0, 0];
                     populationChart.update();
                     document.getElementById('servicesText').innerHTML = '';
                 }
             }
+
 
             // Event listeners
             document.getElementById('yearSelect').addEventListener('change', updateChart);
