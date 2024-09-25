@@ -6,11 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     restoreLayout();
 
     const currentYear = new Date().getFullYear(); // Get the current year
-    const nextYear = currentYear + 1; // Calculate the next year
 
     //TENTATIVE
     window.onload = function () {
-        fetch(`http://127.0.0.1:5000/forecast?year=${nextYear}`)
+        fetch(`http://127.0.0.1:5000/forecast?year=${currentYear}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok ' + response.statusText);
@@ -29,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const serviceSelect = document.getElementById('serviceSelect');
     serviceSelect.addEventListener('change', updateChart);
+
+    const yearSelect = document.getElementById('yearSelect');
+    yearSelect.addEventListener('change', updateChart);
 });
 
 function navigate(url) {
@@ -395,56 +397,102 @@ function updateChart() {
     const selectedYear = document.getElementById('yearSelect').value;
     const selectedService = document.getElementById('serviceSelect').value;
 
-    // Only fetch data if both selections are made
-    if (selectedYear && selectedService) {
-        fetch('../Backend/get_population_services.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                year: selectedYear,
-                service: selectedService
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                const maleCount = parseInt(data.counts.M, 10) || 0;
-                const femaleCount = parseInt(data.counts.F, 10) || 0;
-                const bothCount = parseInt(data.counts.MF, 10) || 0;
+    // Fetch data if a year is selected
+    if (selectedYear) {
+        if (selectedService) {
+            // Data fetching logic for selected service and year
+            if (selectedYear >= 2025) {
+                const maleFemaleURL = `../Backend/python/forecasts/forecast_v1_male_female_${selectedYear}.json`;
+                const maleURL = `../Backend/python/forecasts/forecast_v2_male_${selectedYear}.json`;
+                const femaleURL = `../Backend/python/forecasts/forecast_v3_female_${selectedYear}.json`;
 
-                // Prepare chart data
-                populationChart.data.datasets[0].data = [maleCount, femaleCount, bothCount];
-                populationChart.update();
+                // Fetch data from all three JSON files
+                Promise.all([
+                    fetch(maleFemaleURL),
+                    fetch(maleURL),
+                    fetch(femaleURL)
+                ])
+                    .then(responses => {
+                        responses.forEach(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                        });
+                        return Promise.all(responses.map(response => response.json()));
+                    })
+                    .then(dataArray => {
+                        const allData = [...dataArray[0], ...dataArray[1], ...dataArray[2]];
+                        const filteredData = allData.filter(item => item.Community_Services.trim() === selectedService.trim());
 
-                // Prepare summary text
-                const totalSum = maleCount + femaleCount + bothCount;
-                let genderText = '';
+                        let maleCount = 0, femaleCount = 0, bothCount = 0;
 
-                if (bothCount > 0) {
-                    genderText = 'Both Male & Female';
-                } else if (maleCount && femaleCount) {
-                    genderText = 'Male & Female';
-                } else if (maleCount) {
-                    genderText = 'Male';
-                } else if (femaleCount) {
-                    genderText = 'Female';
-                }
+                        filteredData.forEach(item => {
+                            if (item.Gender === 'M') maleCount += item['2025'];
+                            else if (item.Gender === 'F') femaleCount += item['2025'];
+                            else if (item.Gender === 'MF') bothCount += item['2025'];
+                        });
 
-                let summaryText = `For the year <b>${selectedYear}</b> and the service <b>${selectedService}</b>, the total number of individuals is <b>${totalSum}</b>`;
-                if (genderText) {
-                    summaryText += `, with the breakdown by gender <b>${genderText}</b>.`;
-                }
+                        updateChartData(maleCount, femaleCount, bothCount, selectedYear, selectedService);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        document.getElementById('servicesText').innerHTML = 'Error fetching data. Please try again.';
+                    });
+            } else {
+                // PHP data fetching logic
+                fetch('../Backend/get_population_services.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        year: selectedYear,
+                        service: selectedService
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const maleCount = parseInt(data.counts.M, 10) || 0;
+                        const femaleCount = parseInt(data.counts.F, 10) || 0;
+                        const bothCount = parseInt(data.counts.MF, 10) || 0;
 
-                document.getElementById('servicesText').innerHTML = summaryText.trim();
-            });
+                        updateChartData(maleCount, femaleCount, bothCount, selectedYear, selectedService);
+                    });
+            }
+        } else {
+            // Clear chart and message if no service is selected
+            clearChart();
+        }
     } else {
-        // Clear chart and text if selections are not complete
-        populationChart.data.datasets[0].data = [0, 0, 0];
-        populationChart.update();
-        document.getElementById('servicesText').innerHTML = '';
+        // Clear chart and message if no year is selected
+        clearChart();
     }
 }
+
+function updateChartData(maleCount, femaleCount, bothCount, selectedYear, selectedService) {
+    populationChart.data.datasets[0].data = [maleCount, femaleCount, bothCount];
+    populationChart.update();
+
+    const totalSum = maleCount + femaleCount + bothCount;
+    let genderText = '';
+
+    if (bothCount > 0) genderText = 'Both Male & Female';
+    else if (maleCount > 0 && femaleCount > 0) genderText = 'Male & Female';
+    else if (maleCount > 0) genderText = 'Male';
+    else if (femaleCount > 0) genderText = 'Female';
+
+    let summaryText = `For the year <b>${selectedYear}</b> and the service <b>${selectedService}</b>, the total number of individuals is <b>${totalSum}</b>`;
+    if (genderText) summaryText += `, with the breakdown by gender <b>${genderText}</b>.`;
+
+    document.getElementById('servicesText').innerHTML = summaryText.trim();
+}
+
+function clearChart() {
+    populationChart.data.datasets[0].data = [0, 0, 0];
+    populationChart.update();
+    document.getElementById('servicesText').innerHTML = '';
+}
+
 
 document.querySelector('.form-grid').addEventListener('submit', function (event) {
     const fields = [
@@ -486,21 +534,52 @@ document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
 
 // Enable service and gender options based on year selection
 document.getElementById('yearSelect').addEventListener('change', function () {
-    const isYearSelected = this.value !== '';
+    const selectedYear = this.value;
+    const isYearSelected = selectedYear !== '';
+
     document.getElementById('serviceSelect').disabled = !isYearSelected;
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         checkbox.disabled = !isYearSelected;
     });
 
-    // Reset selections and update chart
+    // Reset selections and update chart if no year is selected
     if (!isYearSelected) {
         document.getElementById('serviceSelect').value = '';
         document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
             checkbox.checked = false;
         });
+    } else if (selectedYear === '2025') {
+        // Show loading indicator
+        document.getElementById('loadingIndicator').style.display = 'block';
+
+        // Fetch data for the year 2025
+        fetchDataForYear(selectedYear);
+    } else {
+        updateChart(); // Call updateChart to reflect changes for other years
     }
-    updateChart(); // Call updateChart to reflect changes
 });
+
+function fetchDataForYear(year) {
+    fetch(`http://127.0.0.1:5000/forecast?year=${year}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Process the data as needed
+            document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('output').innerText = 'Failed to fetch data: ' + error.message;
+        })
+        .finally(() => {
+            // Hide loading indicator after the fetch is complete
+            document.getElementById('loadingIndicator').style.display = 'none';
+        });
+}
 
 // Event listeners
 document.getElementById('yearSelect').addEventListener('change', updateChart);

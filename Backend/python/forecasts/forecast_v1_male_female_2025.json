@@ -1,0 +1,482 @@
+[
+    {
+        "AGE": 1,
+        "Community_Services": "Childhood Immunization",
+        "Gender": "MF",
+        "2025": 249
+    },
+    {
+        "AGE": 2,
+        "Community_Services": "Childhood Immunization",
+        "Gender": "MF",
+        "2025": 294
+    },
+    {
+        "AGE": 3,
+        "Community_Services": "Childhood Immunization",
+        "Gender": "MF",
+        "2025": 309
+    },
+    {
+        "AGE": 4,
+        "Community_Services": "Daycare & Kinder Feeding Program",
+        "Gender": "MF",
+        "2025": 226
+    },
+    {
+        "AGE": 5,
+        "Community_Services": "Daycare & Kinder Feeding Program",
+        "Gender": "MF",
+        "2025": 266
+    },
+    {
+        "AGE": 6,
+        "Community_Services": "School Supplies Assistance for Elementary Students",
+        "Gender": "MF",
+        "2025": 257
+    },
+    {
+        "AGE": 7,
+        "Community_Services": "School Supplies Assistance for Elementary Students",
+        "Gender": "MF",
+        "2025": 202
+    },
+    {
+        "AGE": 8,
+        "Community_Services": "School Supplies Assistance for Elementary Students",
+        "Gender": "MF",
+        "2025": 273
+    },
+    {
+        "AGE": 9,
+        "Community_Services": "School Supplies Assistance for Elementary Students",
+        "Gender": "MF",
+        "2025": 230
+    },
+    {
+        "AGE": 10,
+        "Community_Services": "School Supplies Assistance for Elementary Students",
+        "Gender": "MF",
+        "2025": 249
+    },
+    {
+        "AGE": 11,
+        "Community_Services": "School Supplies Assistance for Elementary Students",
+        "Gender": "MF",
+        "2025": 241
+    },
+    {
+        "AGE": 12,
+        "Community_Services": "School Supplies Assistance for Elementary Students",
+        "Gender": "MF",
+        "2025": 270
+    },
+    {
+        "AGE": 13,
+        "Community_Services": "Drug Prevention Program for out of School Youth (High School)",
+        "Gender": "MF",
+        "2025": 272
+    },
+    {
+        "AGE": 14,
+        "Community_Services": "Drug Prevention Program for out of School Youth (High School)",
+        "Gender": "MF",
+        "2025": 223
+    },
+    {
+        "AGE": 15,
+        "Community_Services": "Drug Prevention Program for out of School Youth (High School)",
+        "Gender": "MF",
+        "2025": 261
+    },
+    {
+        "AGE": 16,
+        "Community_Services": "Drug Prevention Program for out of School Youth (High School)",
+        "Gender": "MF",
+        "2025": 244
+    },
+    {
+        "AGE": 17,
+        "Community_Services": "Educational Assistance (Senior High School)",
+        "Gender": "MF",
+        "2025": 208
+    },
+    {
+        "AGE": 18,
+        "Community_Services": "Educational Assistance (Senior High School)",
+        "Gender": "MF",
+        "2025": 271
+    },
+    {
+        "AGE": 19,
+        "Community_Services": "Financial Assistance for College Students",
+        "Gender": "MF",
+        "2025": 281
+    },
+    {
+        "AGE": 20,
+        "Community_Services": "Financial Assistance for College Students",
+        "Gender": "MF",
+        "2025": 330
+    },
+    {
+        "AGE": 21,
+        "Community_Services": "Financial Assistance for College Students",
+        "Gender": "MF",
+        "2025": 332
+    },
+    {
+        "AGE": 22,
+        "Community_Services": "Financial Assistance for College Students",
+        "Gender": "MF",
+        "2025": 337
+    },
+    {
+        "AGE": 23,
+        "Community_Services": "Fresh Graduate Job Hiring",
+        "Gender": "MF",
+        "2025": 285
+    },
+    {
+        "AGE": 24,
+        "Community_Services": "Fresh Graduate Job Hiring",
+        "Gender": "MF",
+        "2025": 233
+    },
+    {
+        "AGE": 25,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 272
+    },
+    {
+        "AGE": 26,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 296
+    },
+    {
+        "AGE": 27,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 281
+    },
+    {
+        "AGE": 28,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 262
+    },
+    {
+        "AGE": 29,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 250
+    },
+    {
+        "AGE": 30,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 280
+    },
+    {
+        "AGE": 31,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 246
+    },
+    {
+        "AGE": 32,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 257
+    },
+    {
+        "AGE": 33,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 206
+    },
+    {
+        "AGE": 34,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 256
+    },
+    {
+        "AGE": 35,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 164
+    },
+    {
+        "AGE": 36,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 195
+    },
+    {
+        "AGE": 37,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 168
+    },
+    {
+        "AGE": 38,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 139
+    },
+    {
+        "AGE": 39,
+        "Community_Services": "Family Support and Parenting Program",
+        "Gender": "MF",
+        "2025": 144
+    },
+    {
+        "AGE": 40,
+        "Community_Services": "Occupational Assistance ",
+        "Gender": "MF",
+        "2025": 185
+    },
+    {
+        "AGE": 41,
+        "Community_Services": "Occupational Assistance ",
+        "Gender": "MF",
+        "2025": 166
+    },
+    {
+        "AGE": 42,
+        "Community_Services": "Occupational Assistance ",
+        "Gender": "MF",
+        "2025": 175
+    },
+    {
+        "AGE": 43,
+        "Community_Services": "Occupational Assistance ",
+        "Gender": "MF",
+        "2025": 166
+    },
+    {
+        "AGE": 44,
+        "Community_Services": "Occupational Assistance ",
+        "Gender": "MF",
+        "2025": 175
+    },
+    {
+        "AGE": 45,
+        "Community_Services": "Occupational Assistance ",
+        "Gender": "MF",
+        "2025": 201
+    },
+    {
+        "AGE": 46,
+        "Community_Services": "Occupational Assistance ",
+        "Gender": "MF",
+        "2025": 183
+    },
+    {
+        "AGE": 47,
+        "Community_Services": "Occupational Assistance ",
+        "Gender": "MF",
+        "2025": 188
+    },
+    {
+        "AGE": 48,
+        "Community_Services": "Occupational Assistance ",
+        "Gender": "MF",
+        "2025": 201
+    },
+    {
+        "AGE": 49,
+        "Community_Services": "Occupational Assistance ",
+        "Gender": "MF",
+        "2025": 147
+    },
+    {
+        "AGE": 50,
+        "Community_Services": "Occupational Assistance ",
+        "Gender": "MF",
+        "2025": 196
+    },
+    {
+        "AGE": 51,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 187
+    },
+    {
+        "AGE": 52,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 187
+    },
+    {
+        "AGE": 53,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 199
+    },
+    {
+        "AGE": 54,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 185
+    },
+    {
+        "AGE": 55,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 157
+    },
+    {
+        "AGE": 56,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 127
+    },
+    {
+        "AGE": 57,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 122
+    },
+    {
+        "AGE": 58,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 119
+    },
+    {
+        "AGE": 59,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 101
+    },
+    {
+        "AGE": 60,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 116
+    },
+    {
+        "AGE": 61,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 104
+    },
+    {
+        "AGE": 62,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 63
+    },
+    {
+        "AGE": 63,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 110
+    },
+    {
+        "AGE": 64,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 98
+    },
+    {
+        "AGE": 65,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 66
+    },
+    {
+        "AGE": 66,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 56
+    },
+    {
+        "AGE": 67,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 51
+    },
+    {
+        "AGE": 68,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 45
+    },
+    {
+        "AGE": 69,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 34
+    },
+    {
+        "AGE": 70,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 24
+    },
+    {
+        "AGE": 71,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 26
+    },
+    {
+        "AGE": 72,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 16
+    },
+    {
+        "AGE": 73,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 36
+    },
+    {
+        "AGE": 74,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 13
+    },
+    {
+        "AGE": 75,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 13
+    },
+    {
+        "AGE": 76,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 15
+    },
+    {
+        "AGE": 77,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 17
+    },
+    {
+        "AGE": 78,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 10
+    },
+    {
+        "AGE": 79,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 9
+    },
+    {
+        "AGE": 80,
+        "Community_Services": "Medical and Financial Assistance for Senior Citizens",
+        "Gender": "MF",
+        "2025": 11
+    }
+]

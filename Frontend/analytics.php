@@ -40,6 +40,8 @@
         <img src="images/logo.png" alt="Logo">
     </div>
     <div class="container">
+        <div id="loadingIndicator" style="display: none;">Loading, please wait...</div>
+
         <!-- Sidebar -->
         <?php include 'includes/sidebar.php';
         include "../Backend/connect.php";
@@ -142,9 +144,10 @@
                         // Clear existing options
                         yearSelect.innerHTML = '';
 
-                        // Add existing years to the dropdown
-                        const yearsSet = new Set(yearsFromDB); // Use a Set to avoid duplicates
+                        // Create a Set to avoid duplicates
+                        const yearsSet = new Set(yearsFromDB);
 
+                        // Add existing years from the database to the dropdown
                         yearsSet.forEach(year => {
                             const option = document.createElement('option');
                             option.value = year;
@@ -152,8 +155,8 @@
                             yearSelect.appendChild(option);
                         });
 
-                        // Add current year and next year if not already present
-                        [currentYear, currentYear + 1].forEach(year => {
+                        // Check and add current year and next year if not already present
+                        [currentYear + 1].forEach(year => {
                             if (!yearsSet.has(year)) {
                                 const option = document.createElement('option');
                                 option.value = year;
@@ -162,7 +165,7 @@
                             }
                         });
 
-                        // Optionally set the default selection to the current year
+                        // Set the default selection to the current year
                         yearSelect.value = currentYear;
                     }
 

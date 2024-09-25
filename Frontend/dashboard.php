@@ -411,7 +411,6 @@
                     alert('Please fill in all fields.');
                 }
             });
-
         </script>
     </div>
 </body>

@@ -1,0 +1,482 @@
+[
+    {
+        "AGE": 1,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 135
+    },
+    {
+        "AGE": 2,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 123
+    },
+    {
+        "AGE": 3,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 167
+    },
+    {
+        "AGE": 4,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 114
+    },
+    {
+        "AGE": 5,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 120
+    },
+    {
+        "AGE": 6,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 132
+    },
+    {
+        "AGE": 7,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 106
+    },
+    {
+        "AGE": 8,
+        "Community_Services": "Free Circumsition Operation",
+        "Gender": "M",
+        "2025": 146
+    },
+    {
+        "AGE": 9,
+        "Community_Services": "Free Circumsition Operation",
+        "Gender": "M",
+        "2025": 129
+    },
+    {
+        "AGE": 10,
+        "Community_Services": "Free Circumsition Operation",
+        "Gender": "M",
+        "2025": 135
+    },
+    {
+        "AGE": 11,
+        "Community_Services": "Free Circumsition Operation",
+        "Gender": "M",
+        "2025": 129
+    },
+    {
+        "AGE": 12,
+        "Community_Services": "Free Dental Check-Up & Tooth Extraction ",
+        "Gender": "M",
+        "2025": 147
+    },
+    {
+        "AGE": 13,
+        "Community_Services": "Free Dental Check-Up & Tooth Extraction ",
+        "Gender": "M",
+        "2025": 138
+    },
+    {
+        "AGE": 14,
+        "Community_Services": "Condom Distribution Program",
+        "Gender": "M",
+        "2025": 125
+    },
+    {
+        "AGE": 15,
+        "Community_Services": "Condom Distribution Program",
+        "Gender": "M",
+        "2025": 138
+    },
+    {
+        "AGE": 16,
+        "Community_Services": "Condom Distribution Program",
+        "Gender": "M",
+        "2025": 127
+    },
+    {
+        "AGE": 17,
+        "Community_Services": "Condom Distribution Program",
+        "Gender": "M",
+        "2025": 119
+    },
+    {
+        "AGE": 18,
+        "Community_Services": "Condom Distribution Program",
+        "Gender": "M",
+        "2025": 143
+    },
+    {
+        "AGE": 19,
+        "Community_Services": "Condom Distribution Program",
+        "Gender": "M",
+        "2025": 166
+    },
+    {
+        "AGE": 20,
+        "Community_Services": "Condom Distribution Program",
+        "Gender": "M",
+        "2025": 162
+    },
+    {
+        "AGE": 21,
+        "Community_Services": "Hazing Prevention Program",
+        "Gender": "M",
+        "2025": 152
+    },
+    {
+        "AGE": 22,
+        "Community_Services": "Hazing Prevention Program",
+        "Gender": "M",
+        "2025": 179
+    },
+    {
+        "AGE": 23,
+        "Community_Services": "Hazing Prevention Program",
+        "Gender": "M",
+        "2025": 142
+    },
+    {
+        "AGE": 24,
+        "Community_Services": "Hazing Prevention Program",
+        "Gender": "M",
+        "2025": 125
+    },
+    {
+        "AGE": 25,
+        "Community_Services": "Hazing Prevention Program",
+        "Gender": "M",
+        "2025": 144
+    },
+    {
+        "AGE": 26,
+        "Community_Services": "Hazing Prevention Program",
+        "Gender": "M",
+        "2025": 178
+    },
+    {
+        "AGE": 27,
+        "Community_Services": "Hazing Prevention Program",
+        "Gender": "M",
+        "2025": 123
+    },
+    {
+        "AGE": 28,
+        "Community_Services": "Hazing Prevention Program",
+        "Gender": "M",
+        "2025": 134
+    },
+    {
+        "AGE": 29,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 139
+    },
+    {
+        "AGE": 30,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 164
+    },
+    {
+        "AGE": 31,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 133
+    },
+    {
+        "AGE": 32,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 141
+    },
+    {
+        "AGE": 33,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 99
+    },
+    {
+        "AGE": 34,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 123
+    },
+    {
+        "AGE": 35,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 91
+    },
+    {
+        "AGE": 36,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 116
+    },
+    {
+        "AGE": 37,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 101
+    },
+    {
+        "AGE": 38,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 69
+    },
+    {
+        "AGE": 39,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 85
+    },
+    {
+        "AGE": 40,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 97
+    },
+    {
+        "AGE": 41,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 81
+    },
+    {
+        "AGE": 42,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 88
+    },
+    {
+        "AGE": 43,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 96
+    },
+    {
+        "AGE": 44,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 103
+    },
+    {
+        "AGE": 45,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 111
+    },
+    {
+        "AGE": 46,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 91
+    },
+    {
+        "AGE": 47,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 108
+    },
+    {
+        "AGE": 48,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 117
+    },
+    {
+        "AGE": 49,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 83
+    },
+    {
+        "AGE": 50,
+        "Community_Services": "Single Parent Monthly Financial Assistance ",
+        "Gender": "M",
+        "2025": 95
+    },
+    {
+        "AGE": 51,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 100
+    },
+    {
+        "AGE": 52,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 92
+    },
+    {
+        "AGE": 53,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 96
+    },
+    {
+        "AGE": 54,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 101
+    },
+    {
+        "AGE": 55,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 59
+    },
+    {
+        "AGE": 56,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 70
+    },
+    {
+        "AGE": 57,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 69
+    },
+    {
+        "AGE": 58,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 71
+    },
+    {
+        "AGE": 59,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 60
+    },
+    {
+        "AGE": 60,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 76
+    },
+    {
+        "AGE": 61,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 54
+    },
+    {
+        "AGE": 62,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 50
+    },
+    {
+        "AGE": 63,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 55
+    },
+    {
+        "AGE": 64,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 46
+    },
+    {
+        "AGE": 65,
+        "Community_Services": "Prostrate Cancer Awareness Program",
+        "Gender": "M",
+        "2025": 34
+    },
+    {
+        "AGE": 66,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 26
+    },
+    {
+        "AGE": 67,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 23
+    },
+    {
+        "AGE": 68,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 27
+    },
+    {
+        "AGE": 69,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 12
+    },
+    {
+        "AGE": 70,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 9
+    },
+    {
+        "AGE": 71,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 15
+    },
+    {
+        "AGE": 72,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 8
+    },
+    {
+        "AGE": 73,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 19
+    },
+    {
+        "AGE": 74,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 4
+    },
+    {
+        "AGE": 75,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 3
+    },
+    {
+        "AGE": 76,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 3
+    },
+    {
+        "AGE": 77,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 5
+    },
+    {
+        "AGE": 78,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 1
+    },
+    {
+        "AGE": 79,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 1
+    },
+    {
+        "AGE": 80,
+        "Community_Services": "",
+        "Gender": "M",
+        "2025": 0
+    }
+]
