@@ -132,6 +132,43 @@
                     <p id="servicesText" class="services-text"></p>
                 </div>
 
+                <script>
+                    const yearsFromDB = <?php echo json_encode(array_values($years)); ?>;
+
+                    function initializeYearSelect() {
+                        const yearSelect = document.getElementById('yearSelect');
+                        const currentYear = new Date().getFullYear();
+
+                        // Clear existing options
+                        yearSelect.innerHTML = '';
+
+                        // Add existing years to the dropdown
+                        const yearsSet = new Set(yearsFromDB); // Use a Set to avoid duplicates
+
+                        yearsSet.forEach(year => {
+                            const option = document.createElement('option');
+                            option.value = year;
+                            option.textContent = year;
+                            yearSelect.appendChild(option);
+                        });
+
+                        // Add current year and next year if not already present
+                        [currentYear, currentYear + 1].forEach(year => {
+                            if (!yearsSet.has(year)) {
+                                const option = document.createElement('option');
+                                option.value = year;
+                                option.textContent = year;
+                                yearSelect.appendChild(option);
+                            }
+                        });
+
+                        // Optionally set the default selection to the current year
+                        yearSelect.value = currentYear;
+                    }
+
+                    initializeYearSelect();
+                </script>
+
                 <!-- Line Chart Card -->
                 <div class="card" id="lineChartCard">
                     <button class="move-btn" title="Move Card">

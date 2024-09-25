@@ -1,9 +1,31 @@
 // Initialize charts and event listeners after DOM content is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    initializeInteract(); // Then initialize interactions
-    initializeCharts(); // Finally, initialize charts
+    initializeInteract(); // Initialize interactions
+    initializeCharts(); // Initialize charts
     initializeSidebar();
     restoreLayout();
+
+    const currentYear = new Date().getFullYear(); // Get the current year
+    const nextYear = currentYear + 1; // Calculate the next year
+
+    //TENTATIVE
+    window.onload = function () {
+        fetch(`http://127.0.0.1:5000/forecast?year=${nextYear}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data); // Process the data as needed
+                document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('output').innerText = 'Failed to fetch data: ' + error.message;
+            });
+    };
 
     const serviceSelect = document.getElementById('serviceSelect');
     serviceSelect.addEventListener('change', updateChart);
