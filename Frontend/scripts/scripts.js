@@ -5,26 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSidebar();
     restoreLayout();
 
-    const currentYear = new Date().getFullYear(); // Get the current year
-
-    //TENTATIVE
-    window.onload = function () {
-        fetch(`http://127.0.0.1:5000/forecast?year=${currentYear}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log(data); // Process the data as needed
-                document.getElementById('output').innerText = JSON.stringify(data, null, 2);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('output').innerText = 'Failed to fetch data: ' + error.message;
-            });
-    };
+    fetch('../Backend/run_forecast.php')  // Adjust the path to your PHP script
+        .then(response => response.text())
+        .then(data => {
+            console.log(data); // Output for debugging
+            alert("Script executed. Check console for output.");
+        })
+        .catch(error => console.error('Error:', error));
 
     const serviceSelect = document.getElementById('serviceSelect');
     serviceSelect.addEventListener('change', updateChart);
@@ -32,6 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const yearSelect = document.getElementById('yearSelect');
     yearSelect.addEventListener('change', updateChart);
 });
+
+function showLoadingIndicator() {
+    document.getElementById('loadingBackground').style.display = 'block'; // Show background
+}
+
+// Hide loading indicator function
+function hideLoadingIndicator() {
+    document.getElementById('loadingBackground').style.display = 'none'; // Hide background
+}
 
 function navigate(url) {
     window.location.href = url;
@@ -415,12 +411,19 @@ function updateChart() {
                     .then(responses => {
                         responses.forEach(response => {
                             if (!response.ok) {
-                                throw new Error('Network response was not ok');
+                                showLoadingIndicator();
+                                throw new Error(`Network response was not ok: ${response.statusText}`);
                             }
                         });
                         return Promise.all(responses.map(response => response.json()));
                     })
                     .then(dataArray => {
+                        hideLoadingIndicator();
+                        // Check if data exists
+                        if (dataArray.some(data => !Array.isArray(data) || data.length === 0)) {
+                            throw new Error('One or more data files are empty or not in expected format.');
+                        }
+
                         const allData = [...dataArray[0], ...dataArray[1], ...dataArray[2]];
                         const filteredData = allData.filter(item => item.Community_Services.trim() === selectedService.trim());
 
@@ -435,8 +438,9 @@ function updateChart() {
                         updateChartData(maleCount, femaleCount, bothCount, selectedYear, selectedService);
                     })
                     .catch(error => {
+                        generateForecast();
                         console.error('Error fetching data:', error);
-                        document.getElementById('servicesText').innerHTML = 'Error fetching data. Please try again.';
+                        document.getElementById('servicesText').innerHTML = 'Generating data, please wait...';
                     });
             } else {
                 // PHP data fetching logic
@@ -467,6 +471,29 @@ function updateChart() {
         // Clear chart and message if no year is selected
         clearChart();
     }
+}
+
+function generateForecast() {
+    const currentYear = new Date().getFullYear(); // Get the current year
+
+    fetch(`http://127.0.0.1:5000/forecast?year=${currentYear}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Process the data as needed
+            document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('output').innerText = 'Failed to fetch data: ' + error.message;
+        })
+        .finally(() => {
+            hideLoadingIndicator(); // Hide loading indicator after fetching data
+        });
 }
 
 function updateChartData(maleCount, femaleCount, bothCount, selectedYear, selectedService) {

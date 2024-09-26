@@ -20,28 +20,87 @@
             opacity: 0.05;
             /* Adjust transparency here */
             pointer-events: none;
-            /* Ensures that the stamp doesn't interfere with user interactions */
+            /* Ensures it doesn't interfere with user interactions */
+            text-align: center;
+            /* Center text below the logo */
         }
 
         .logo-stamp img {
             max-width: 100vw;
-            /* Ensure the image scales with the viewport width */
+            /* Scale with viewport width */
             max-height: 100vh;
-            /* Ensure the image scales with the viewport height */
+            /* Scale with viewport height */
             width: 500px;
+            /* Fixed width */
             height: 500px;
+            /* Fixed height */
+        }
+
+        .loading-text {
+            text-align: center;
+            position: fixed;
+            /* Use fixed positioning */
+            top: 50%;
+            /* Center vertically */
+            left: 50%;
+            /* Center horizontally */
+            transform: translate(-50%, -50%);
+            /* Adjust positioning */
+            z-index: 9999;
+            /* Ensure text is on top */
+            color: white;
+            /* Change to suit your design */
+            font-size: 24px;
+            /* Adjust size */
+            margin-top: 10px;
+            /* Space between logo and text */
+            animation: fadeIn 1s infinite;
+            /* Fade in animation */
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Background for loading effect */
+        .loading-background {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            /* Semi-transparent background */
+            backdrop-filter: blur(5px);
+            /* Blurs the background */
+            z-index: 9998;
+            /* Ensure it's below the logo stamp */
         }
     </style>
-    <title>Analytics</title>
 </head>
 
 <body>
-    <div class="logo-stamp">
+
+    <div class="loading-background" id="loadingBackground">
+        <div class="loading-text">Generating data, please wait...</div>
+    </div>
+
+    <div class="logo-stamp" id="logoStamp">
         <img src="images/logo.png" alt="Logo">
     </div>
     <div class="container">
-        <div id="loadingIndicator" style="display: none;">Loading, please wait...</div>
-
         <!-- Sidebar -->
         <?php include 'includes/sidebar.php';
         include "../Backend/connect.php";
