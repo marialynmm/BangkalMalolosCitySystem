@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import pandas as pd
 from prophet import Prophet
+import xgboost as xgb
 import json
 import os
 
@@ -36,8 +37,8 @@ class Male(db.Model):
     year_2022 = db.Column("2022", db.Integer)
     year_2023 = db.Column("2023", db.Integer)
     year_2024 = db.Column("2024", db.Integer)
-    community_services = db.Column(db.String(512))  # Add this line
-    gender = db.Column(db.String(1), default='M')  # Add this line
+    community_services = db.Column(db.String(512))
+    gender = db.Column(db.String(1), default='M')
 
 class Female(db.Model):
     __tablename__ = 'v3_female'
@@ -48,9 +49,10 @@ class Female(db.Model):
     year_2022 = db.Column("2022", db.Integer)
     year_2023 = db.Column("2023", db.Integer)
     year_2024 = db.Column("2024", db.Integer)
-    community_services = db.Column(db.String(512))  # Add this line
-    gender = db.Column(db.String(1), default='F')  # Add this line
+    community_services = db.Column(db.String(512))
+    gender = db.Column(db.String(1), default='F')
 
+# Prophet Forecasting
 def forecast_table(records, next_year, table_name):
     data = {
         "AGE": [],
@@ -61,7 +63,7 @@ def forecast_table(records, next_year, table_name):
         "2023": [],
         "2024": [],
         "Community_Services": [],
-        "Gender": []  # Add Gender here
+        "Gender": []
     }
 
     for record in records:
@@ -72,10 +74,8 @@ def forecast_table(records, next_year, table_name):
         data["2022"].append(record.year_2022)
         data["2023"].append(record.year_2023)
         data["2024"].append(record.year_2024)
-        
-        # Fetch Community_Services and Gender
-        data["Community_Services"].append(record.community_services)  # No placeholder needed
-        data["Gender"].append(record.gender)  # Add Gender from the record
+        data["Community_Services"].append(record.community_services)
+        data["Gender"].append(record.gender)
 
     df = pd.DataFrame(data)
     predictions = []
@@ -96,8 +96,8 @@ def forecast_table(records, next_year, table_name):
 
         predictions.append({
             'AGE': int(row['AGE']),
-            'Community_Services': row['Community_Services'],  # Include this field
-            'Gender': row['Gender'],  # Include Gender here
+            'Community_Services': row['Community_Services'],
+            'Gender': row['Gender'],
             str(next_year): int(round(prediction_next_year))
         })
 
@@ -113,6 +113,92 @@ def forecast_table(records, next_year, table_name):
     with open(output_file, 'w') as f:
         json.dump(predictions, f, indent=4)
 
+# DeepAR Forecasting for Male
+def forecast_deepar(records, next_year, table_name):
+    predictions = []
+
+    for record in records:
+        historical_data = [
+            record.year_2019,
+            record.year_2020,
+            record.year_2021,
+            record.year_2022,
+            record.year_2023,
+            record.year_2024
+        ]
+
+        # Simple mean prediction logic for now
+        prediction_next_year = int(round(sum(historical_data) / len(historical_data)))  # Replace with actual DeepAR logic
+
+        predictions.append({
+            'AGE': int(record.age),
+            'Community_Services': record.community_services,
+            'Gender': record.gender,
+            str(next_year): prediction_next_year
+        })
+
+        setattr(record, f'year_{next_year}', prediction_next_year)
+
+    db.session.commit()
+
+    output_folder = 'forecasts'
+    os.makedirs(output_folder, exist_ok=True)
+
+    output_file = os.path.join(output_folder, f'forecast_{table_name}_{next_year}.json')
+
+    with open(output_file, 'w') as f:
+        json.dump(predictions, f, indent=4)
+
+# XGBoost Forecasting
+def forecast_xgboost(records, next_year, table_name):
+    predictions = []
+
+    # Prepare historical data for training
+    for record in records:
+        historical_data = [
+            record.year_2019,
+            record.year_2020,
+            record.year_2021,
+            record.year_2022,
+            record.year_2023,
+            record.year_2024
+        ]
+
+        # Create DataFrame for this record
+        df = pd.DataFrame([historical_data], columns=["2019", "2020", "2021", "2022", "2023", "2024"])
+
+        # Define features (X) and target (y)
+        X = df.iloc[:, :-1]  # First five years as features
+        y = df.iloc[:, -1]   # Last year as target
+
+        # Train the XGBoost model
+        model = xgb.XGBRegressor()
+        model.fit(X, y)
+
+        # Make prediction for the next year
+        prediction_next_year = model.predict(X)[0]  # Predict based on the same input
+
+        # Prepare the prediction result
+        predictions.append({
+            'AGE': int(record.age),
+            'Community_Services': record.community_services,
+            'Gender': record.gender,
+            str(next_year): int(round(prediction_next_year))
+        })
+
+        # Update the record in the database
+        setattr(record, f'year_{next_year}', int(round(prediction_next_year)))
+
+    db.session.commit()
+
+    # Save predictions to JSON file
+    output_folder = 'forecasts'
+    os.makedirs(output_folder, exist_ok=True)
+    output_file = os.path.join(output_folder, f'forecast_{table_name}_{next_year}.json')
+
+    with open(output_file, 'w') as f:
+        json.dump(predictions, f, indent=4)
+
 @app.route('/forecast', methods=['GET'])
 def forecast():
     current_year = request.args.get('year', type=int)
@@ -122,17 +208,17 @@ def forecast():
 
     next_year = current_year + 1
 
-    # Forecast for MaleFemale
+    # Forecast for MaleFemale using Prophet
     records_mf = MaleFemale.query.all()
     forecast_table(records_mf, next_year, "v1_male_female")
 
-    # Forecast for Male
+    # Forecast for Male using DeepAR
     records_m = Male.query.all()
-    forecast_table(records_m, next_year, "v2_male")
+    forecast_deepar(records_m, next_year, "v2_male")
 
-    # Forecast for Female
+    # Forecast for Female using XGBoost
     records_f = Female.query.all()
-    forecast_table(records_f, next_year, "v3_female")
+    forecast_xgboost(records_f, next_year, "v3_female")
 
     return jsonify({"message": "Forecasts generated successfully."})
 
