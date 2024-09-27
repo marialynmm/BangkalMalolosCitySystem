@@ -1,3 +1,10 @@
+<?php
+$error_message = isset($_SESSION['login_error']) ? $_SESSION['login_error'] : '';
+if (!empty($error_message)) {
+    unset($_SESSION['login_error']);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,6 +29,31 @@
             color: red;
             font-weight: bold;
             margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal {
+            display: none;
+            /* Hide by default */
+            animation: slideUp 0.5s ease forwards;
+            /* Apply the animation */
+        }
+
+        .modal.show {
+            display: flex;
+            /* Show modal */
         }
     </style>
 </head>
@@ -39,7 +71,7 @@
     <button class="login-btn" id="openModalBtn">Login</button>
 
     <!-- Modal -->
-    <div class="modal" id="loginModal">
+    <div class="modal" id="loginModal" style="display: <?php echo !empty($_GET['error']) ? 'flex' : 'none'; ?>;">
         <div class="modal-content">
             <button class="close-btn" id="closeModalBtn">&times;</button>
             <h1>Login</h1>
@@ -61,23 +93,26 @@
     </div>
 
     <script>
-        //Login Open modal
+        // Login Open modal
         document.addEventListener('DOMContentLoaded', () => {
             const openModalBtn = document.getElementById('openModalBtn');
             const closeModalBtn = document.getElementById('closeModalBtn');
             const loginModal = document.getElementById('loginModal');
 
             openModalBtn.addEventListener('click', () => {
-                loginModal.style.display = 'flex';
+                loginModal.classList.add('show'); // Add show class to display modal
+                loginModal.style.display = 'flex'; // Set display to flex
             });
 
             closeModalBtn.addEventListener('click', () => {
                 loginModal.style.display = 'none';
+                loginModal.classList.remove('show'); // Remove show class when closing
             });
 
             window.addEventListener('click', (e) => {
                 if (e.target === loginModal) {
                     loginModal.style.display = 'none';
+                    loginModal.classList.remove('show'); // Remove show class when closing
                 }
             });
         });

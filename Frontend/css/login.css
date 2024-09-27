@@ -55,7 +55,6 @@ html {
     /* Full width */
     height: 100%;
     /* Full height */
-    background-color: rgba(0, 0, 0, 0.7);
     /* Semi-transparent background */
     justify-content: center;
     /* Center horizontally */
@@ -67,7 +66,7 @@ html {
 
 /* Modal Content */
 .modal-content {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgb(255, 255, 255);
     /* Slightly transparent white background */
     padding: 40px;
     /* Padding inside the modal */

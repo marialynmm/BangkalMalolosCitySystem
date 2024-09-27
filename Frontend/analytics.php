@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<?php include '../Backend/session.php'; ?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -103,7 +105,6 @@
     <div class="container">
         <!-- Sidebar -->
         <?php include 'includes/sidebar.php';
-        include "../Backend/connect.php";
 
         // Get unique services
         $services = [];
@@ -143,7 +144,7 @@
 
         $conn->close();
         ?>
-        <div id="tooltip" class="tooltip" style="display: none;">Drag to move</div>
+        <div id="tooltip" class="tooltip" style="display: none;">Drag to resize</div>
 
         <!-- Content -->
         <div class="content" id="content">

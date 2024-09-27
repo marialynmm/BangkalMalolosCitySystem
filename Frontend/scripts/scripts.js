@@ -1,15 +1,26 @@
-// Initialize charts and event listeners after DOM content is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    initializeInteract(); // Initialize interactions
-    initializeCharts(); // Initialize charts
+    initializeInteract();
+    initializeCharts();
     initializeSidebar();
     restoreLayout();
 
-    fetch('../Backend/run_forecast.php')  // Adjust the path to your PHP script
+    // Function to terminate the existing Python process
+    const terminateProcess = () => {
+        fetch('../Backend/terminate_forecast.php')
+            .then(response => response.text())
+            .then(data => console.log("Terminated process:", data))
+            .catch(error => console.error('Error:', error));
+    };
+
+    // Call terminateProcess on page unload
+    window.addEventListener('beforeunload', terminateProcess);
+
+    // Start the new Python process
+    fetch('../Backend/run_forecast.php')
         .then(response => response.text())
         .then(data => {
-            console.log(data); // Output for debugging
-            alert("Script executed. Check console for output.");
+            console.log(data);
+            alert("New script executed. Check console for output.");
         })
         .catch(error => console.error('Error:', error));
 
@@ -19,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const yearSelect = document.getElementById('yearSelect');
     yearSelect.addEventListener('change', updateChart);
 });
+
 
 function showLoadingIndicator() {
     document.getElementById('loadingBackground').style.display = 'block'; // Show background

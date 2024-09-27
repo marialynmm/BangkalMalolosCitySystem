@@ -1,60 +1,41 @@
 <?php
-// Include database connection
-include "connect.php";
+include '../Backend/connect.php';
 
-// Start session
-session_start();
-
-// Initialize error message variable
 $error_message = "";
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get username and password from POST request
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
-    // Validate inputs
     if (empty($username) || empty($password)) {
-        $error_message = "Username and password are required.";
+        $_SESSION['login_error'] = "Username and password are required.";
     } else {
-        // Prepare SQL query to fetch user details
         $stmt = $conn->prepare("SELECT ID, user_name, password FROM user_tb WHERE user_name = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        // Check if user exists
-        if ($result->num_rows == 1) {
+        if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
 
-            // Verify plain text password
             if ($password === $user['password']) {
-                // Set session variables
                 $_SESSION['user_id'] = $user['ID'];
-                $_SESSION['username'] = $user['username'];
-
-                // Redirect to a protected page (e.g., dashboard)
+                $_SESSION['username'] = $user['user_name'];
                 header("Location: ../Frontend/dashboard.php");
                 exit();
             } else {
-                $error_message = "Invalid password.";
+                $_SESSION['login_error'] = "Invalid password.";
             }
         } else {
-            $error_message = "No user found with that username.";
+            $_SESSION['login_error'] = "No user found with that username.";
         }
 
-        // Close statement
         $stmt->close();
     }
 
-    // Store error message in session
-    $_SESSION['login_error'] = $error_message;
-
     // Close connection
     $conn->close();
-
-    // Redirect back to the login page
     header("Location: ../Frontend/index.php");
     exit();
 }

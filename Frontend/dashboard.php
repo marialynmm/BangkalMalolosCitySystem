@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php include "../Backend/connect.php"; ?>
-<?php session_start(); ?>
+<?php include '../Backend/session.php'; ?>
 
 <head>
     <meta charset="UTF-8">
