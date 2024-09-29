@@ -19,7 +19,7 @@ $toilet_type = strtoupper($_POST['toilet_type']); // If you need to convert this
 $birthday_datetime = $birthday . ' 00:00:00'; // Append time
 
 // Prepare and execute your SQL statement
-$sql = "INSERT INTO Census_tb 
+$sql = "INSERT INTO brgy_bangkal_record_census_final 
         (No_of_Population, No_of_Household, No_of_Families, Purok_St_Sitio_Blk_Lot, 
          Name, Birthday, Age, Gender, Occupation, Civil_Status, Toilet_Type) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -49,5 +49,5 @@ if ($stmt->execute()) {
 $stmt->close();
 $conn->close();
 
-header("Location: ../Frontend/dashboard.php");
+header(header: "Location: ../Frontend/dashboard.php");
 exit();

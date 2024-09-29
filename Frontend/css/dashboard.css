@@ -124,7 +124,6 @@ h1 {
     /* Height will be adjusted based on content */
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
 .form-grid {
@@ -159,12 +158,14 @@ h1 {
 }
 
 .submit-button {
+    background-color: #007bff;
     grid-column: span 2;
     /* Make the submit button span across both columns */
-    margin-top: 15px;
-    /* Space above button */
 }
 
+.submit-button:hover {
+    background-color: #00448d;
+}
 
 .card-content {
     display: flex;
@@ -223,6 +224,7 @@ h1 {
 }
 
 .card:nth-child(4) {
+    grid-column: span 3;
     background-color: #ffffff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     /* Red */
@@ -251,6 +253,154 @@ h1 {
 .card:nth-child(9) {
     background-color: #c2ee70;
     /* Red */
+}
+
+.card-header {
+    display: flex;
+    /* Use flexbox for layout */
+    justify-content: space-between;
+    /* Space out items */
+    align-items: center;
+    /* Vertically center items */
+    margin: 0;
+    margin-bottom: 20px;
+    /* Remove any margin */
+}
+
+.table-controls {
+    margin-left: auto;
+    /* Push the search input to the right */
+}
+
+#searchInput {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 250px;
+    /* Fixed width for the search input */
+    margin-left: 20px;
+    /* Space between title and input */
+}
+
+.table-container {
+    max-height: 550px;
+    /* Set your desired maximum height */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    overflow-x: auto;
+    /* Enable horizontal scrolling */
+    width: 100%;
+    /* Ensure it takes full width of the card */
+}
+
+#dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    /* Let the table adjust width based on content */
+}
+
+#dataTable th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    white-space: nowrap;
+    /* Prevents wrapping in headers */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Truncate overflowing text */
+}
+
+#dataTable tbody tr:hover {
+    cursor: pointer;
+    background-color: #b2fdb6;
+    /* Optional: Change background color on hover for better visibility */
+}
+
+#dataTable td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    max-width: 150px;
+    /* Set a max width to cells to control expansion */
+    overflow: hidden;
+    white-space: nowrap;
+    /* Prevents wrapping in cells */
+    text-overflow: ellipsis;
+    /* Truncate overflowing text */
+}
+
+/* Specific widths for certain columns if needed */
+#dataTable th:nth-child(1) {
+    width: 100px;
+}
+
+/* No of Population */
+#dataTable th:nth-child(2) {
+    width: 100px;
+}
+
+/* No of Household */
+#dataTable th:nth-child(3) {
+    width: 100px;
+}
+
+/* No of Families */
+#dataTable th:nth-child(4) {
+    width: 150px;
+}
+
+/* Purok St Sitio Blk Lot */
+#dataTable th:nth-child(5) {
+    width: 120px;
+}
+
+/* NAME */
+#dataTable th:nth-child(6) {
+    width: 100px;
+}
+
+/* BIRTHDAY */
+#dataTable th:nth-child(7) {
+    width: 50px;
+}
+
+/* AGE */
+#dataTable th:nth-child(8) {
+    width: 80px;
+}
+
+/* GENDER */
+#dataTable th:nth-child(9) {
+    width: 100px;
+}
+
+/* CIVIL STATUS */
+#dataTable th:nth-child(10) {
+    width: 100px;
+}
+
+/* OCCUPATION */
+#dataTable th:nth-child(11) {
+    width: 100px;
+}
+
+/* TOILET TYPE */
+
+#dataTable th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#dataTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+    /* Alternate row colors */
+}
+
+#dataTable tr:hover {
+    background-color: #e0e0e0;
+    /* Hover effect */
 }
 
 .card-categoires {
@@ -454,45 +604,8 @@ h1 {
     /* Full height */
     overflow: auto;
     /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.5);
-    /* Darker background for better contrast */
-}
-
-/* Modal Content */
-.modal-content {
-    background-color: #ffffff;
-    /* White background for the modal */
-    margin: 5% auto;
-    /* Centered and a bit closer to the top */
-    padding: 30px;
-    border-radius: 8px;
-    /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    /* Subtle shadow for depth */
-    width: 80%;
-    /* Responsive width */
-    max-width: 600px;
-    /* Maximum width for large screens */
-    position: relative;
-    /* Position relative to use absolute positioning for the close button */
-}
-
-/* Close Button */
-.close {
-    color: #333;
-    /* Darker color for better visibility */
-    float: right;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* Close Button Hover */
-.close:hover,
-.close:focus {
-    color: #ff0000;
-    /* Red color on hover for attention */
-    text-decoration: none;
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
 }
 
 /* Buttons within the Modal */
@@ -511,6 +624,22 @@ button {
     /* Spacing between buttons */
 }
 
+#addDataButton {
+    background-color: #1e8534;
+}
+
+#addDataButton:hover {
+    background-color: #176428;
+}
+
+#deleteDataButton {
+    background-color: rgb(199, 70, 70);
+}
+
+#deleteDataButton:hover {
+    background-color: rgb(124, 43, 43);
+}
+
 button:hover {
     background-color: #0056b3;
     /* Darker blue on hover */
@@ -519,4 +648,201 @@ button:hover {
 button:active {
     background-color: #004494;
     /* Even darker blue when clicked */
+}
+
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: hidden;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+.modal-content {
+    border-radius: 2%;
+    position: relative;
+    bottom: 100px;
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    /* Could be more or less, depending on screen size */
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Input Fields */
+input[type="number"],
+input[type="text"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border 0.3s;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+.message {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#toggleColumnButton {
+    border: none;
+    /* Remove default border */
+    border-radius: 4px;
+    /* Rounded corners */
+    background-color: #007bff;
+    /* Button background color */
+    color: white;
+    /* Button text color */
+    cursor: pointer;
+    /* Pointer on hover */
+}
+
+#toggleColumnButton:hover {
+    background-color: #0056b3;
+    /* Darker background on hover */
+}
+
+.column-toggle-container {
+    background-color: #f9f9f9;
+    /* Light background for contrast */
+    border: 1px solid #ddd;
+    /* Subtle border */
+    border-radius: 5px;
+    /* Rounded corners */
+    padding: 15px;
+    /* Padding for spacing */
+    margin-bottom: 20px;
+    /* Space below the container */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Soft shadow */
+}
+
+.checkbox-group {
+    display: flex;
+    /* Use flexbox for layout */
+    justify-content: space-between;
+    /* Space between the columns */
+}
+
+.column {
+    flex: 1;
+    /* Each column takes equal space */
+    margin-right: 20px;
+    /* Space between columns */
+}
+
+.column:last-child {
+    margin-right: 0;
+    /* No margin on the last column */
+}
+
+label {
+    display: block;
+    /* Each label on a new line */
+    margin-bottom: 5px;
+    /* Space between labels */
+}
+
+.checkbox-group label {
+    margin: 5px 0;
+    /* Margin for spacing between labels */
+    cursor: pointer;
+    /* Change cursor on hover */
+    font-size: 14px;
+    /* Font size */
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    /* Space between checkbox and label text */
+}
+
+#paginationControls {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    justify-content: space-between;
+    /* Space between buttons */
+}
+
+#paginationControls span {
+    flex-grow: 1;
+    /* Allow the span to grow and take available space */
+    text-align: center;
+    /* Center the text */
+}
+
+#nextPageButton {
+    margin-left: auto;
+    /* Push the Next button to the right */
+}
+
+.disabled {
+    background-color: #c1c1c1;
+    color: white;
+    cursor: not-allowed;
+}
+
+.disabled {
+    background-color: #c1c1c1;
+    color: white;
+    cursor: not-allowed;
+    pointer-events: none;
+    /* Prevent hover effects */
+}
+
+/* Optional: You can also define the hover effect for non-disabled buttons */
+.pageButton {
+    background-color: #c1c1c1;
+    /* Gray for inactive buttons */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 0 2px;
+}
+
+.pageButton.active {
+    background-color: #007bff;
+    /* Blue for the active button */
+    color: white;
 }

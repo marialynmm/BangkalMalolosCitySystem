@@ -1,3 +1,501 @@
+// 
+//
+// DASHBOARD SCRIPTS
+//
+//
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById("dataModal");
+    const closeButton = document.querySelector(".close-button");
+    const deleteButton = document.getElementById("deleteDataButton");
+    let currentRow;
+
+
+    const rowsPerPage = 10; // Number of rows to display per page
+    let currentPage = 1;
+    const table = document.getElementById('dataTable');
+    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+    const pageButtonsContainer = document.getElementById('pageButtons');
+
+    function displayRows() {
+        // Hide all rows
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].style.display = 'none';
+        }
+        // Calculate start and end index
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        // Display the rows for the current page
+        for (let i = start; i < end && i < rows.length; i++) {
+            rows[i].style.display = '';
+        }
+        updatePaginationButtons();
+        updatePageButtons();
+    }
+
+    function updatePaginationButtons() {
+        const prevButton = document.getElementById('prevPageButton');
+        const nextButton = document.getElementById('nextPageButton');
+
+        prevButton.disabled = currentPage === 1;
+        nextButton.disabled = currentPage === totalPages;
+    }
+
+    function updatePageButtons() {
+        pageButtonsContainer.innerHTML = ''; // Clear previous buttons
+        const buttonCount = 5; // Limit to 5 buttons
+        let startPage = Math.max(1, currentPage - Math.floor(buttonCount / 2));
+        let endPage = Math.min(totalPages, startPage + buttonCount - 1);
+
+        // Adjust startPage if endPage exceeds totalPages
+        if (endPage - startPage < buttonCount - 1) {
+            startPage = Math.max(1, endPage - buttonCount + 1);
+        }
+
+        // Create page buttons
+        for (let i = startPage; i <= endPage; i++) {
+            const button = document.createElement('button');
+            button.textContent = i;
+            button.className = 'pageButton';
+            button.onclick = () => {
+                currentPage = i;
+                displayRows();
+            };
+            if (i === currentPage) {
+                button.classList.add('active'); // Add active class for the current page
+            }
+            pageButtonsContainer.appendChild(button);
+            // Add a comma after each button except the last one
+            if (i < endPage) {
+                pageButtonsContainer.appendChild(document.createTextNode('  '));
+            }
+        }
+    }
+
+    document.getElementById('prevPageButton').addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            displayRows();
+        }
+    });
+
+    document.getElementById('nextPageButton').addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            displayRows();
+        }
+    });
+
+    // Initial display
+    displayRows();
+
+    // Open modal
+    function openModal() {
+        modal.style.display = "block";
+    }
+
+    // Close modal
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormFields();
+    };
+
+    // Close modal when clicking outside
+    window.onclick = function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+            clearFormFields();
+        }
+    };
+
+    // Add new data
+    document.getElementById("addDataButton").addEventListener("click", function () {
+        currentRow = null; // Reset for adding new data
+        clearFormFields();
+        deleteButton.style.display = "none"; // Hide delete button
+        document.querySelector('.form-grid').action = '../Backend/add_data.php'; // Set action
+        openModal();
+    });
+
+    // Handle row clicks for update
+    const tableRows = document.querySelectorAll('#dataTable tbody tr');
+    tableRows.forEach(row => {
+        row.addEventListener('click', function () {
+            currentRow = this; // Set current row
+            const name = this.getAttribute('data-name');
+            loadUpdateForm(name);
+            openModal();
+        });
+    });
+
+    // Load form for update
+    function loadUpdateForm(name) {
+        const row = Array.from(tableRows).find(r => r.getAttribute('data-name') === name);
+        if (row) {
+            document.querySelector('.chart-title').innerText = `Update Data for ${name}`;
+            document.getElementById('no_of_population').value = row.getAttribute('data-no-of-population');
+            document.getElementById('no_of_household').value = row.getAttribute('data-no-of-household');
+            document.getElementById('no_of_families').value = row.getAttribute('data-no-of-families');
+            document.getElementById('purok_st_sitio_blk_lot').value = row.getAttribute('data-purok-st-sitio-blk-lot');
+            document.getElementById('name').value = name;
+            document.getElementById('birthday').value = row.getAttribute('data-birthday').split(' ')[0];
+            document.getElementById('age').value = row.getAttribute('data-age');
+            document.getElementById('gender').value = row.getAttribute('data-gender') === 'M' ? 'male' : 'female';
+            document.getElementById('occupation').value = row.getAttribute('data-occupation');
+            document.getElementById('civil_status').value = row.getAttribute('data-civil-status').toLowerCase();
+            document.getElementById('toilet_type').value = row.getAttribute('data-toilet-type');
+
+            // Set the form action for updating
+            document.querySelector('.form-grid').action = '../Backend/update_data.php'; // Update action
+            document.querySelector('.submit-button').innerText = "Update Data"; // Change button text
+            deleteButton.style.display = "inline-block"; // Show delete button
+        }
+    }
+
+    // Delete data functionality
+    deleteButton.addEventListener('click', function () {
+        if (currentRow) {
+            const confirmDelete = confirm("Are you sure you want to delete this data?");
+            if (confirmDelete) {
+                const name = currentRow.getAttribute('data-name');
+                fetch('../Backend/delete_data.php', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        name: name
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json(); // Expecting a JSON response
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            // Set a session message to indicate success
+                            window.location.href = '../Frontend/dashboard.php?message=' + encodeURIComponent(data.message);
+                        } else {
+                            // Set a session message for error
+                            window.location.href = '../Frontend/dashboard.php?error=' + encodeURIComponent(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        window.location.href = '../Frontend/dashboard.php?error=' + encodeURIComponent("An error occurred while deleting data: " + error.message);
+                    });
+            }
+        } else {
+            alert("No data selected for deletion.");
+        }
+    });
+
+    // Clear form fields
+    function clearFormFields() {
+        document.querySelector('.form-grid').reset();
+        document.querySelector('.submit-button').innerText = "Add Data"; // Reset button text
+        deleteButton.style.display = "none"; // Hide delete button
+        currentRow = null; // Clear current row
+    }
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
+        const selectedColumnIndex = getSelectedColumnIndex(); // Get the currently selected column index
+    
+        tableRows.forEach(row => {
+            const cells = row.querySelectorAll('td'); // Select all cells in the row
+            let rowVisible = false; // Track if the row matches the search term
+    
+            // Check if the selected column index is valid
+            if (selectedColumnIndex !== -1 && selectedColumnIndex < cells.length) {
+                const cell = cells[selectedColumnIndex]; // Get the cell in the selected column
+                const cellValue = cell.textContent.toLowerCase().trim(); // Normalize cell value
+    
+                // Check for exact match
+                if (cellValue === searchTerm) {
+                    rowVisible = true; // Match found in the selected column
+                }
+            }
+    
+            // Show or hide the row based on the match
+            row.style.display = rowVisible ? '' : 'none';
+        });
+    });
+    
+    // Function to get the index of the currently selected column for searching
+    function getSelectedColumnIndex() {
+        const checkboxes = document.querySelectorAll('.column-toggle input[type="checkbox"]');
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                return i; // Return the index of the checked column
+            }
+        }
+        return -1; // Return -1 if none are checked
+    }
+    
+    // Function to toggle column visibility
+    function toggleColumn(columnIndex) {
+        const table = document.getElementById("dataTable");
+        const rows = table.getElementsByTagName("tr");
+    
+        const isChecked = event.target.checked; // Determine if the checkbox is checked
+    
+        for (let i = 0; i < rows.length; i++) {
+            const cell = rows[i].getElementsByTagName("td")[columnIndex];
+            if (cell) {
+                cell.style.display = isChecked ? "" : "none"; // Show or hide based on checkbox state
+            }
+    
+            // For the header row
+            const headerCell = rows[i].getElementsByTagName("th")[columnIndex];
+            if (headerCell) {
+                headerCell.style.display = isChecked ? "" : "none"; // Show or hide header cell
+            }
+        }
+    }
+});
+
+function sortTable(columnIndex) {
+    const table = document.getElementById("dataTable");
+    const tbody = table.getElementsByTagName("tbody")[0];
+    const rows = Array.from(tbody.getElementsByTagName("tr"));
+
+    const isAscending = tbody.getAttribute('data-order') === 'asc';
+    const newOrder = isAscending ? 'desc' : 'asc';
+    tbody.setAttribute('data-order', newOrder);
+
+    rows.sort((rowA, rowB) => {
+        const cellA = rowA.getElementsByTagName("td")[columnIndex].textContent;
+        const cellB = rowB.getElementsByTagName("td")[columnIndex].textContent;
+
+        return isAscending ?
+            cellA.localeCompare(cellB) :
+            cellB.localeCompare(cellA);
+    });
+
+    // Clear the existing rows and append the sorted rows
+    while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+    }
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+function toggleColumnContainer() {
+    const container = document.getElementById('columnToggleContainer');
+    if (container.style.display === 'none' || container.style.display === '') {
+        container.style.display = 'block'; // Show the container
+    } else {
+        container.style.display = 'none'; // Hide the container
+    }
+}
+// 
+//
+// DASHBOARD SCRIPTS
+//
+//
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById("dataModal");
+    const closeButton = document.querySelector(".close-button");
+    const deleteButton = document.getElementById("deleteDataButton");
+    let currentRow;
+
+    // Open modal
+    function openModal() {
+        modal.style.display = "block";
+    }
+
+    // Close modal
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormFields();
+    };
+
+    // Close modal when clicking outside
+    window.onclick = function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+            clearFormFields();
+        }
+    };
+
+    // Add new data
+    document.getElementById("addDataButton").addEventListener("click", function () {
+        currentRow = null; // Reset for adding new data
+        clearFormFields();
+        deleteButton.style.display = "none"; // Hide delete button
+        document.querySelector('.form-grid').action = '../Backend/add_data.php'; // Set action
+        openModal();
+    });
+
+    // Handle row clicks for update
+    const tableRows = document.querySelectorAll('#dataTable tbody tr');
+    tableRows.forEach(row => {
+        row.addEventListener('click', function () {
+            currentRow = this; // Set current row
+            const name = this.getAttribute('data-name');
+            loadUpdateForm(name);
+            openModal();
+        });
+    });
+
+    // Load form for update
+    function loadUpdateForm(name) {
+        const row = Array.from(tableRows).find(r => r.getAttribute('data-name') === name);
+        if (row) {
+            document.querySelector('.chart-title').innerText = `Update Data for ${name}`;
+            document.getElementById('no_of_population').value = row.getAttribute('data-no-of-population');
+            document.getElementById('no_of_household').value = row.getAttribute('data-no-of-household');
+            document.getElementById('no_of_families').value = row.getAttribute('data-no-of-families');
+            document.getElementById('purok_st_sitio_blk_lot').value = row.getAttribute('data-purok-st-sitio-blk-lot');
+            document.getElementById('name').value = name;
+            document.getElementById('birthday').value = row.getAttribute('data-birthday').split(' ')[0];
+            document.getElementById('age').value = row.getAttribute('data-age');
+            document.getElementById('gender').value = row.getAttribute('data-gender') === 'M' ? 'male' : 'female';
+            document.getElementById('occupation').value = row.getAttribute('data-occupation');
+            document.getElementById('civil_status').value = row.getAttribute('data-civil-status').toLowerCase();
+            document.getElementById('toilet_type').value = row.getAttribute('data-toilet-type');
+
+            // Set the form action for updating
+            document.querySelector('.form-grid').action = '../Backend/update_data.php'; // Update action
+            document.querySelector('.submit-button').innerText = "Update Data"; // Change button text
+            deleteButton.style.display = "inline-block"; // Show delete button
+        }
+    }
+
+    // Delete data functionality
+    deleteButton.addEventListener('click', function () {
+        if (currentRow) {
+            const confirmDelete = confirm("Are you sure you want to delete this data?");
+            if (confirmDelete) {
+                const name = currentRow.getAttribute('data-name');
+                fetch('../Backend/delete_data.php', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        name: name
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json(); // Expecting a JSON response
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            // Set a session message to indicate success
+                            window.location.href = '../Frontend/dashboard.php?message=' + encodeURIComponent(data.message);
+                        } else {
+                            // Set a session message for error
+                            window.location.href = '../Frontend/dashboard.php?error=' + encodeURIComponent(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        window.location.href = '../Frontend/dashboard.php?error=' + encodeURIComponent("An error occurred while deleting data: " + error.message);
+                    });
+            }
+        } else {
+            alert("No data selected for deletion.");
+        }
+    });
+
+    // Clear form fields
+    function clearFormFields() {
+        document.querySelector('.form-grid').reset();
+        document.querySelector('.submit-button').innerText = "Add Data"; // Reset button text
+        deleteButton.style.display = "none"; // Hide delete button
+        currentRow = null; // Clear current row
+    }
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
+        tableRows.forEach(row => {
+            const cells = row.querySelectorAll('td'); // Select all cells in the row
+            let rowVisible = false; // Track if any cell matches
+
+            // Loop through each cell in the row
+            cells.forEach(cell => {
+                if (cell.textContent.toLowerCase().includes(searchTerm)) {
+                    rowVisible = true; // If a match is found, mark the row as visible
+                }
+            });
+
+            // Show or hide the row based on the matches
+            row.style.display = rowVisible ? '' : 'none';
+        });
+    });
+});
+
+function sortTable(columnIndex) {
+    const table = document.getElementById("dataTable");
+    const tbody = table.getElementsByTagName("tbody")[0];
+    const rows = Array.from(tbody.getElementsByTagName("tr"));
+
+    const isAscending = tbody.getAttribute('data-order') === 'asc';
+    const newOrder = isAscending ? 'desc' : 'asc';
+    tbody.setAttribute('data-order', newOrder);
+
+    rows.sort((rowA, rowB) => {
+        const cellA = rowA.getElementsByTagName("td")[columnIndex].textContent;
+        const cellB = rowB.getElementsByTagName("td")[columnIndex].textContent;
+
+        return isAscending ?
+            cellA.localeCompare(cellB) :
+            cellB.localeCompare(cellA);
+    });
+
+    // Clear the existing rows and append the sorted rows
+    while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+    }
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+function toggleColumnContainer() {
+    const container = document.getElementById('columnToggleContainer');
+    if (container.style.display === 'none' || container.style.display === '') {
+        container.style.display = 'block'; // Show the container
+    } else {
+        container.style.display = 'none'; // Hide the container
+    }
+}
+
+function toggleColumn(columnIndex) {
+    const table = document.getElementById("dataTable");
+    const rows = table.getElementsByTagName("tr");
+
+    // Determine if the checkbox is checked
+    const isChecked = event.target.checked;
+
+    for (let i = 0; i < rows.length; i++) {
+        const cell = rows[i].getElementsByTagName("td")[columnIndex];
+        if (cell) {
+            cell.style.display = isChecked ? "" : "none"; // Show or hide based on checkbox state
+        }
+
+        // For the header row
+        const headerCell = rows[i].getElementsByTagName("th")[columnIndex];
+        if (headerCell) {
+            headerCell.style.display = isChecked ? "" : "none"; // Show or hide header cell
+        }
+    }
+}
+
+//
+//
+// ANALYTICS SCRIPTS
+//
+//
+
 document.addEventListener('DOMContentLoaded', () => {
     initializeInteract();
     initializeCharts();
@@ -92,7 +590,6 @@ const defaultLayout = [
     { "id": "barChartCard", "x": 52, "y": 0, "width": 545, "height": 608 },
     { "id": "servicesBarChartCard", "x": 500, "y": 0, "width": 1215, "height": 607 },
     { "id": "lineChartCard", "x": -234, "y": 626, "width": 1777, "height": 520 },
-    { "id": "dataTableCard", "x": -687, "y": 1163, "width": 1777, "height": 561 }
 ];
 
 function applyDefaultLayout() {
@@ -295,13 +792,18 @@ function initializeCharts() {
 
     // Initialize Bar Chart
     const ctxBar = document.getElementById('barChart').getContext('2d');
+
+    // Prepare labels and data from ageData
+    const ageLabels = Object.keys(ageData);
+    const ageValues = Object.values(ageData);
+
     barChart = new Chart(ctxBar, {
         type: 'bar',
         data: {
-            labels: ['0-10 years', '11-20 years', '21-30 years', '31-40 years'],
+            labels: ageLabels, // Use dynamic labels from ageData
             datasets: [{
                 label: 'Number of People',
-                data: [120, 190, 300, 150],
+                data: ageValues, // Use dynamic data from ageData
                 backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
                 borderWidth: 1
             }]
@@ -315,12 +817,19 @@ function initializeCharts() {
                     position: 'top'
                 },
                 tooltip: {
+                    enabled: true,
+                    mode: 'nearest', // Show tooltip for the nearest bar
+                    intersect: true, // Only show tooltip when directly over a bar
                     callbacks: {
                         label: function (tooltipItem) {
                             return `${tooltipItem.label}: ${tooltipItem.raw} people`;
                         }
                     }
                 }
+            },
+            hover: {
+                mode: 'nearest', // Hover over the nearest item
+                intersect: true // Show only on intersect
             },
             scales: {
                 x: {
@@ -329,6 +838,13 @@ function initializeCharts() {
                         text: 'Age Groups'
                     }
                 },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Based On Census Data'
+                    },
+                    beginAtZero: true // Ensure y-axis starts at 0
+                }
             }
         }
     });
@@ -693,23 +1209,3 @@ function restoreLayout() {
         });
     }
 }
-
-// TABLE
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('searchInput');
-    const table = document.getElementById('dataTable');
-    const tbody = table.querySelector('tbody');
-
-    searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase();
-        const rows = Array.from(tbody.querySelectorAll('tr'));
-
-        rows.forEach(row => {
-            const cells = Array.from(row.querySelectorAll('td'));
-            const nameCell = cells[4]; // Assuming 'NAME' is the 5th column (index 4)
-            const match = nameCell && nameCell.textContent.toLowerCase().includes(searchTerm);
-
-            row.style.display = match ? '' : 'none';
-        });
-    });
-});

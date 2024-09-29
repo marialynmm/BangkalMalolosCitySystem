@@ -201,73 +201,14 @@ h1 {
     }
 }
 
-/*TABLE*/
-.table-controls {
-    margin-bottom: 10px;
-}
-
-#searchInput {
-    padding: 5px;
-    margin-right: 10px;
-}
-
-.filter-container {
-    display: flex;
-    align-items: center;
-}
-
-#filterSelect,
-#filterValue {
-    margin-left: 10px;
-    padding: 5px;
-}
-
-.table-container {
-    /* Adjust the height as needed */
-    overflow-y: auto;
-    overflow-x: hidden;
-    border: 1px solid #ddd;
-    /* Optional border for aesthetics */
-    margin-top: 20px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 16px;
-    text-align: left;
-}
-
-th,
-td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #f4f4f4;
-}
-
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tr:hover {
-    background-color: #f1f1f1;
-}
-
-thead th {
-    position: sticky;
-    top: 0;
-}
-
-
 .card {
     z-index: 1;
     background-color: #ffffff;
     border-radius: 8px;
-    padding: 20px;
+    padding-bottom: 100px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 100%;
     height: 100%;
@@ -333,10 +274,6 @@ thead th {
     /* Maintain aspect ratio */
     object-fit: contain;
     /* Scale the image */
-}
-
-#barChart {
-    margin-top: 40px;
 }
 
 .filters {
@@ -424,8 +361,7 @@ input[type="checkbox"] {
 
 .card canvas {
     max-width: 100%;
-    /* Ensure canvas does not exceed card width */
-    max-height: 100%;
+    height: 410px;
     /* Ensure canvas does not exceed card height */
     display: block;
     /* Avoid extra space below canvas */
@@ -546,11 +482,6 @@ input[type="checkbox"] {
     /* Remove default margin */
     font-size: 16px;
     /* Adjust font size as needed */
-}
-
-.card canvas {
-    width: 100% !important;
-    height: 400px !important;
 }
 
 /* Responsive layout */

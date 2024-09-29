@@ -142,6 +142,30 @@
         // Remove duplicates and keep unique years
         $years = array_unique($years);
 
+        //AGE GROUP
+        $ageGroups = [];
+        $ageQuery = $conn->query("SELECT AGE FROM brgy_bangkal_record_census_final");
+        if ($ageQuery) {
+            while ($row = $ageQuery->fetch_assoc()) {
+                $age = (int)$row['AGE'];
+                // Group ages into categories
+                if ($age >= 0 && $age <= 9) {
+                    $ageGroups['0-9'] = ($ageGroups['0-9'] ?? 0) + 1;
+                } elseif ($age >= 10 && $age <= 19) {
+                    $ageGroups['10-19'] = ($ageGroups['10-19'] ?? 0) + 1;
+                } elseif ($age >= 20 && $age <= 29) {
+                    $ageGroups['20-29'] = ($ageGroups['20-29'] ?? 0) + 1;
+                } elseif ($age >= 30 && $age <= 39) {
+                    $ageGroups['30-39'] = ($ageGroups['30-39'] ?? 0) + 1;
+                } elseif ($age >= 40 && $age <= 49) {
+                    $ageGroups['40-49'] = ($ageGroups['40-49'] ?? 0) + 1;
+                } elseif ($age >= 50) {
+                    $ageGroups['50+'] = ($ageGroups['50+'] ?? 0) + 1;
+                }
+            }
+        }
+
+
         $conn->close();
         ?>
         <div id="tooltip" class="tooltip" style="display: none;">Drag to resize</div>
@@ -156,6 +180,12 @@
                     <button class="move-btn" title="Move Card">
                         <img src="images/move_ic.png" alt="Move Icon" />
                     </button>
+
+                    <script>
+                        // Prepare data in PHP
+                        const ageData = <?php echo json_encode($ageGroups); ?>;
+                    </script>
+
                     <div class="card-header">
                         <h3>Age Group</h3>
                     </div>
@@ -190,7 +220,9 @@
                             </div>
                         </div>
                     </div>
+                    <div style="height:390px;">
                     <canvas id="populationChart" width="150" height="250"></canvas>
+                    </div>
                     <p id="servicesText" class="services-text"></p>
                 </div>
 
@@ -241,66 +273,6 @@
                         <h3>Population Growth</h3>
                     </div>
                     <canvas id="lineChart"></canvas>
-                </div>
-
-                <!-- Table Data Card -->
-                <div class="card" id="dataTableCard">
-                    <button class="move-btn" title="Move Card">
-                        <img src="images/move_ic.png" alt="Move Icon" />
-                    </button>
-                    <div class="card-header">
-                        <h3>Data Table</h3>
-                        <div class="table-controls">
-                            <input type="text" id="searchInput" placeholder="Search by NAME..." />
-                        </div>
-                    </div>
-
-                    <div class="table-container">
-                        <table id="dataTable">
-                            <thead>
-                                <tr>
-                                    <?php
-                                    include "../Backend/connect.php"; // Include your database connection
-
-                                    // Fetch column names
-                                    $sql = "SHOW COLUMNS FROM Census_tb"; // Replace with your table name
-                                    $result = $conn->query($sql);
-
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            $columnName = str_replace('_', ' ', $row['Field']);
-                                            echo "<th>" . $columnName . "</th>";
-                                        }
-                                    } else {
-                                        echo "<tr><td>No columns found</td></tr>";
-                                    }
-                                    ?>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                // Fetch data from the table
-                                $sql = "SELECT * FROM Census_tb WHERE Name IS NOT NULL AND Name != 'N/A'";
-
-                                $result = $conn->query($sql);
-
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>";
-                                        foreach ($row as $data) {
-                                            echo "<td>" . htmlspecialchars($data) . "</td>";
-                                        }
-                                        echo "</tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='10'>No data available</td></tr>";
-                                }
-
-                                $conn->close();
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
 
             </div>
