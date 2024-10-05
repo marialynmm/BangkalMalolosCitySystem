@@ -97,7 +97,7 @@ if (!empty($error_message)) {
     <div class="welcome-message">
         <img src="images/logo.png" alt="Barangay Bangkal" />
         <h1>Welcome to Barangay Bangkal</h1>
-        <p>Malolos, Bulacan</p>
+        <p>Lungsod ng Malolos Bulacan</p>
         <!-- Login Button -->
         <br>
         <button class="login-btn" id="openModalBtn">Login</button>
