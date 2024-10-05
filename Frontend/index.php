@@ -15,7 +15,6 @@ if (!empty($error_message)) {
     <title>Barangay Bangkal - Welcome</title>
     <style>
         body {
-            background: url('images/bg.png') no-repeat center center/cover;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -55,6 +54,40 @@ if (!empty($error_message)) {
             display: flex;
             /* Show modal */
         }
+
+        .welcome-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* Center the message */
+            text-align: center;
+            /* Center text */
+        }
+
+        .pause-btn {
+            position: fixed;
+            bottom: 20px;
+            /* Adjust as needed */
+            right: 20px;
+            /* Adjust as needed */
+            padding: 10px 20px;
+            /* Button padding */
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Semi-transparent background */
+            color: white;
+            /* Text color */
+            border: none;
+            /* No border */
+            border-radius: 5px;
+            /* Rounded corners */
+            cursor: pointer;
+            /* Pointer cursor */
+            font-size: 16px;
+            /* Font size */
+            z-index: 1000;
+            /* Ensure it appears above other elements */
+        }
     </style>
 </head>
 
@@ -65,10 +98,81 @@ if (!empty($error_message)) {
         <img src="images/logo.png" alt="Barangay Bangkal" />
         <h1>Welcome to Barangay Bangkal</h1>
         <p>Malolos, Bulacan</p>
+        <!-- Login Button -->
+        <br>
+        <button class="login-btn" id="openModalBtn">Login</button>
     </div>
+    <button class="pause-btn" id="pauseMapBtn">Pause Map</button>
 
-    <!-- Login Button -->
-    <button class="login-btn" id="openModalBtn">Login</button>
+
+    <div id="map-container"></div>
+
+    <script src="../Frontend/scripts/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true
+        });
+        renderer.setClearColor(0x000000, 0); // Transparent background
+
+        const mapTexture = new THREE.TextureLoader().load('images/map.jpg');
+        const mapGeometry = new THREE.PlaneGeometry(10, 10);
+        const mapMaterial = new THREE.MeshBasicMaterial({
+            map: mapTexture
+        });
+        const mapMesh = new THREE.Mesh(mapGeometry, mapMaterial);
+
+        // Rotate the map to lay flat
+        mapMesh.rotation.x = -Math.PI / 2;
+        scene.add(mapMesh);
+
+        // Set initial camera position
+        camera.position.set(0, 5, 10);
+        camera.lookAt(0, 0, 0);
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('map-container').appendChild(renderer.domElement);
+
+        // Animation variables
+        let angle = 0;
+        const radius = 7;
+        let isPaused = false; // Track whether the animation is paused
+
+        // Animation function
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (!isPaused) {
+                // Update angle to create circular motion
+                angle += 0.0001;
+                camera.position.x = radius * Math.cos(angle);
+                camera.position.z = radius * Math.sin(angle);
+                camera.position.y = 5;
+            }
+
+            camera.lookAt(0, 0, 0);
+            renderer.render(scene, camera);
+        }
+
+        // Start animation
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Pause/Resume functionality
+        document.getElementById('pauseMapBtn').addEventListener('click', () => {
+            isPaused = !isPaused; // Toggle the pause state
+            const buttonText = isPaused ? 'Resume Map' : 'Pause Map';
+            document.getElementById('pauseMapBtn').textContent = buttonText; // Update button text
+        });
+    </script>
 
     <!-- Modal -->
     <div class="modal" id="loginModal" style="display: <?php echo !empty($_GET['error']) ? 'flex' : 'none'; ?>;">

@@ -6,13 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../Frontend/css/fontawesome-free-6.6.0-web/css/all.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="icon" href="images/logo.png" type="image/x-icon">
-    <script src="scripts/scripts.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-
+    
     <title>Dashboard</title>
     <style>
         .logo-stamp {
@@ -94,6 +90,7 @@
                     <div style="color:#333;" class="card">
                         <div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
                             <h3 style="margin: 0;">Census Data Table</h3>
+                            <i>Select the row to update or delete.</i>
                             <div>
                                 <button id="addDataButton" style="margin-right: 10px;">Add New Data</button>
                                 <button id="toggleColumnButton" onclick="toggleColumnContainer()">Show/Hide Column Selection</button>
@@ -271,6 +268,7 @@
                             <option value="widow">Widow</option>
                             <option value="divorced">Divorced</option>
                             <option value="live-in">Live-In</option>
+                            <option value="legally separated">Legally Separated</option>
                         </select>
                     </div>
 

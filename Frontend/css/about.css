@@ -1,0 +1,127 @@
+.main-header {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.page-title {
+    font-size: 3em;
+    color: #333;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.content-area {
+    flex: 1;
+    /* This will make the content area take up the remaining space */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.gallery img {
+    width: 200px;
+    /* Adjust as needed */
+    margin: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.gallery img:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.social-media-links {
+    margin-top: 10px;
+}
+
+.social-media-links a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+#map-container {
+    width: 100%;
+    height: 100vh;
+    /* Full screen height */
+    position: absolute;
+    /* Set to absolute to stay in the background */
+    top: 0;
+    /* Align to the top */
+    left: 0;
+    /* Align to the left */
+}
+
+.pause-btn {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 1000;
+    /* Ensure it appears above everything */
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    /* Center vertically */
+    left: 50%;
+    /* Center horizontally */
+    transform: translate(-50%, -50%);
+    /* Adjust to center */
+    padding: 20px;
+    display: flex;
+    /* Use flexbox for layout */
+    justify-content: space-between;
+    /* Space between columns */
+    width: 80%;
+    /* Adjust the width of the overlay */
+    color: #ffffff;
+}
+
+.title {
+    position: relative;
+    margin-bottom: 10px;
+    width: 200px;
+    text-align: center;
+    /* Adjust width as necessary */
+}
+
+.title img {
+    width: 100%;
+    /* Make the image responsive */
+    height: auto;
+}
+
+footer {
+    position: fixed;
+    /* Use fixed positioning */
+    bottom: 0;
+    left: 0;
+    /* Align to the left */
+    width: 100%;
+    /* Full width */
+    background-color: rgba(0, 0, 0, 0.37);
+    /* Background color */
+    color: white;
+    /* Text color */
+    text-align: center;
+    /* Center the text */
+    padding: 10px 0;
+    /* Padding for the footer */
+}

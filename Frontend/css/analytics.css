@@ -1,3 +1,17 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url('../css/fontawesome-free-6.6.0-web/webfonts/Poppins-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../css/fontawesome-free-6.6.0-web/webfonts/Poppins-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -11,7 +25,7 @@ body {
 
 .container {
     display: flex;
-    height: 100vh;
+    height: auto;
     transition: margin-left 0.3s;
 }
 
@@ -758,4 +772,22 @@ button:hover {
 button:active {
     background-color: #a1a1a1;
     /* Even darker blue when clicked */
+}
+
+footer {
+    position: fixed;
+    /* Use fixed positioning */
+    bottom: 0;
+    left: 0;
+    /* Align to the left */
+    width: 100%;
+    /* Full width */
+    background-color: rgba(0, 0, 0, 0.37);
+    /* Background color */
+    color: white;
+    /* Text color */
+    text-align: center;
+    /* Center the text */
+    padding: 10px 0;
+    /* Padding for the footer */
 }

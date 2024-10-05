@@ -11,7 +11,7 @@
             <li onclick="navigate('<?php echo ('analytics.php'); ?>')">
                 <i class="icon"><i class="fa-solid fa-chart-pie"></i></i><span>Analytics</span>
             </li>
-            <li onclick="navigate('<?php echo ('about.php'); ?>')">
+            <li onclick="window.open('https://maloloscity.gov.ph/barangay-bangkal/', '_blank')">
                 <i class="icon"><i class="fa-solid fa-circle-info"></i></i><span>About</span>
             </li>
             <li onclick="navigate('<?php echo ('index.php'); ?>')">

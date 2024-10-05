@@ -7,12 +7,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../Frontend/css/fontawesome-free-6.6.0-web/css/all.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
     <link rel="stylesheet" href="css/analytics.css">
-    <script src="scripts/scripts.js"></script>
     <link rel="icon" href="images/logo.png" type="image/x-icon">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/interactjs@latest"></script>
+    <script src="../Frontend/css/chart.min.js"></script>
+    <script src="../Frontend/css/interact.js"></script>
     <style>
         .logo-stamp {
             position: fixed;
@@ -221,7 +219,7 @@
                         </div>
                     </div>
                     <div style="height:390px;">
-                    <canvas id="populationChart" width="150" height="250"></canvas>
+                        <canvas id="populationChart" width="150" height="250"></canvas>
                     </div>
                     <p id="servicesText" class="services-text"></p>
                 </div>
@@ -281,6 +279,13 @@
         <!-- Grid Overlay -->
         <div class="grid-overlay"></div>
     </div>
+
+    <footer>
+        <p>© 2024 Barangay Bangkal Lungsod ng Malolos Bulacan. All rights reserved.</p>
+        <div>
+            <a href="https://maloloscity.gov.ph/barangay-bangkal/" target="_blank" style="color: gray; text-decoration: none;">More Information</a>
+        </div>
+    </footer>
 </body>
 
 
