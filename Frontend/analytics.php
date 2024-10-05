@@ -280,12 +280,6 @@
         <div class="grid-overlay"></div>
     </div>
 
-    <footer>
-        <p>© 2024 Barangay Bangkal Lungsod ng Malolos Bulacan. All rights reserved.</p>
-        <div>
-            <a href="https://maloloscity.gov.ph/barangay-bangkal/" target="_blank" style="color: gray; text-decoration: none;">More Information</a>
-        </div>
-    </footer>
 </body>
 
 

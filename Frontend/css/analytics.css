@@ -773,21 +773,3 @@ button:active {
     background-color: #a1a1a1;
     /* Even darker blue when clicked */
 }
-
-footer {
-    position: fixed;
-    /* Use fixed positioning */
-    bottom: 0;
-    left: 0;
-    /* Align to the left */
-    width: 100%;
-    /* Full width */
-    background-color: rgba(0, 0, 0, 0.37);
-    /* Background color */
-    color: white;
-    /* Text color */
-    text-align: center;
-    /* Center the text */
-    padding: 10px 0;
-    /* Padding for the footer */
-}
